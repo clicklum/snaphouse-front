@@ -12,6 +12,7 @@ import ShowDetail from "@/pages/ShowDetail";
 import Tasks from "@/pages/Tasks";
 import Analytics from "@/pages/Analytics";
 import Employees from "@/pages/Employees";
+import EmployeeDetail from "@/pages/EmployeeDetail";
 import Attendance from "@/pages/Attendance";
 import Payroll from "@/pages/Payroll";
 import SettingsPage from "@/pages/SettingsPage";
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/employees" element={<Employees />} />
+            <Route path="/employees/:id" element={<EmployeeDetail />} />
             <Route path="/attendance" element={<Attendance />} />
             <Route path="/payroll" element={<Payroll />} />
             <Route path="/settings" element={<SettingsPage />} />
