@@ -4,7 +4,6 @@ import { setToken, API_BASE } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { toast } from "sonner";
 
 const Login = () => {
@@ -25,7 +24,7 @@ const Login = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Login failed");
       setToken(data.token);
-      navigate("/", { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch (err: any) {
       toast.error(err.message || "Login failed");
     } finally {
@@ -34,17 +33,49 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-sm border-border">
-        <CardHeader className="text-center space-y-2 pb-2">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary font-display text-lg font-bold text-primary-foreground">
-            SH
+    <div className="min-h-screen flex bg-background">
+      {/* Left Panel - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-muted p-12">
+        <div className="max-w-md space-y-8">
+          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary font-display text-2xl font-bold text-primary-foreground">
+            SJ
           </div>
-          <h1 className="font-display text-xl font-bold">SnapHouse</h1>
-          <p className="text-sm text-muted-foreground">Shah Jewna & Co</p>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-3">
+            <h1 className="font-display text-3xl font-bold text-foreground">
+              Shah Jewna & Co
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              Production management system
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Social Plug Media · Daily Vertex LLC
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Panel - Login Form */}
+      <div className="flex w-full lg:w-1/2 items-center justify-center p-8">
+        <div className="w-full max-w-sm space-y-8">
+          {/* Mobile logo */}
+          <div className="lg:hidden space-y-4 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-primary font-display text-xl font-bold text-primary-foreground">
+              SJ
+            </div>
+            <div>
+              <h1 className="font-display text-xl font-bold text-foreground">Shah Jewna & Co</h1>
+              <p className="text-sm text-muted-foreground mt-1">Production management system</p>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h2 className="font-display text-2xl font-bold text-foreground">Sign in</h2>
+            <p className="text-sm text-muted-foreground">
+              Enter your credentials to access SnapHouse
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -54,24 +85,35 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="h-11"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Password</Label>
+                <button
+                  type="button"
+                  className="text-xs text-primary hover:underline"
+                >
+                  Forgot password?
+                </button>
+              </div>
               <Input
                 id="password"
                 type="password"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="h-11"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
+            <Button type="submit" className="w-full h-11" disabled={loading}>
+              {loading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };
