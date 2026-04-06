@@ -220,10 +220,12 @@ const Employees = () => {
                               <User className="h-4 w-4 mr-2" />
                               View Profile
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleIssueFine(emp.id)}>
-                              <AlertTriangle className="h-4 w-4 mr-2" />
-                              Issue Fine
-                            </DropdownMenuItem>
+                            {canFine && (
+                              <DropdownMenuItem onClick={() => openFineModal(emp)}>
+                                <AlertTriangle className="h-4 w-4 mr-2" />
+                                Issue Fine
+                              </DropdownMenuItem>
+                            )}
                             <DropdownMenuItem onClick={() => handleDeactivate(emp.id)} className="text-destructive focus:text-destructive">
                               <XCircle className="h-4 w-4 mr-2" />
                               Deactivate
