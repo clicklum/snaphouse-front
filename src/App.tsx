@@ -31,6 +31,7 @@ const App = () => (
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/auth/slack" element={<SlackLogin />} />
+          <Route path="/auth/slack/callback" element={<SlackCallback />} />
           <Route
             element={
               <AuthGuard>
