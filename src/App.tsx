@@ -7,6 +7,7 @@ import AuthGuard from "@/components/AuthGuard";
 import AppLayout from "@/components/AppLayout";
 import Login from "@/pages/Login";
 import SlackLogin from "@/pages/SlackLogin";
+import SlackCallback from "@/pages/SlackCallback";
 import Dashboard from "@/pages/Dashboard";
 import Shows from "@/pages/Shows";
 import ShowDetail from "@/pages/ShowDetail";
