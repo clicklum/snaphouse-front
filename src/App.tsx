@@ -23,6 +23,7 @@ import EpisodeDetail from "@/pages/EpisodeDetail";
 import Leaves from "@/pages/Leaves";
 import ShowAnalytics from "@/pages/ShowAnalytics";
 import TeamAnalytics from "@/pages/TeamAnalytics";
+import SnapchatAnalytics from "@/pages/SnapchatAnalytics";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
