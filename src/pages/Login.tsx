@@ -17,6 +17,13 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [domainError, setDomainError] = useState("");
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("session") === "expired") {
+      toast.error("Your session has expired. Please sign in again.");
+    }
+  }, [searchParams]);
 
   const validateDomain = (value: string) => {
     if (!value.includes("@")) { setDomainError(""); return; }
