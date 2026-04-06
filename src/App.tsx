@@ -18,6 +18,7 @@ import EmployeeDetail from "@/pages/EmployeeDetail";
 import Attendance from "@/pages/Attendance";
 import Payroll from "@/pages/Payroll";
 import SettingsPage from "@/pages/SettingsPage";
+import EpisodeDetail from "@/pages/EpisodeDetail";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
