@@ -99,14 +99,9 @@ const Employees = () => {
     return list;
   }, [employees, search, roleFilter]);
 
-  const handleIssueFine = async (id: string) => {
-    try {
-      await apiFetch(`/api/employees/${id}/fine`, { method: "POST", body: JSON.stringify({}) });
-      toast.success("Fine issued");
-      fetchEmployees();
-    } catch (err: any) {
-      toast.error(err.message || "Failed to issue fine");
-    }
+  const openFineModal = (emp: Employee) => {
+    setFineTarget({ id: emp.id, name: emp.name });
+    setFineOpen(true);
   };
 
   const handleDeactivate = async (id: string) => {
