@@ -274,6 +274,7 @@ const Shows = () => {
           )}
         </CardContent>
       </Card>
+      )}
 
       {/* New Show Sheet */}
       <NewShowSheet
