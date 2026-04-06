@@ -51,11 +51,14 @@ const Tasks = () => {
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
+  const [error, setError] = useState<string | null>(null);
+
   const fetchTasks = useCallback(() => {
     setLoading(true);
+    setError(null);
     apiFetch<Task[]>("/api/tasks")
       .then(setTasks)
-      .catch(() => toast.error("Failed to load tasks"))
+      .catch((e) => setError(e.message || "Failed to load tasks"))
       .finally(() => setLoading(false));
   }, []);
 
