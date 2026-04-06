@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
+import { TableSkeleton } from "@/components/PageSkeletons";
+import { EmployeesEmpty, PageError } from "@/components/PageStates";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -42,22 +43,6 @@ const roleBadgeVariant = (role: string) => {
 
 const allRoles = ["All Roles", "Admin", "Floor Manager", "Team Lead", "Researcher", "Editor", "QA", "Uploader"];
 
-const TableSkeleton = () => (
-  <div className="space-y-3 p-6">
-    {Array.from({ length: 6 }).map((_, i) => (
-      <div key={i} className="flex items-center gap-4">
-        <Skeleton className="h-9 w-9 rounded-full" />
-        <Skeleton className="h-4 flex-1" />
-        <Skeleton className="h-5 w-16 rounded-full" />
-        <Skeleton className="h-4 w-10" />
-        <Skeleton className="h-4 w-10" />
-        <Skeleton className="h-4 w-14" />
-        <Skeleton className="h-5 w-16 rounded-full" />
-        <Skeleton className="h-6 w-6 rounded" />
-      </div>
-    ))}
-  </div>
-);
 
 const Employees = () => {
   const navigate = useNavigate();
@@ -65,6 +50,7 @@ const Employees = () => {
   const canFine = ["admin", "floor_manager"].includes(role);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("All Roles");
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -73,9 +59,10 @@ const Employees = () => {
 
   const fetchEmployees = () => {
     setLoading(true);
+    setError(null);
     apiFetch<Employee[]>("/api/employees")
       .then(setEmployees)
-      .catch(() => toast.error("Failed to load employees"))
+      .catch((e) => setError(e.message || "Failed to load employees"))
       .finally(() => setLoading(false));
   };
 
@@ -152,14 +139,17 @@ const Employees = () => {
       </div>
 
       {/* Table */}
+      {error ? (
+        <PageError message={error} onRetry={fetchEmployees} />
+      ) : (
       <Card className="border-border">
         <CardContent className="p-0">
           {loading ? (
-            <TableSkeleton />
+            <TableSkeleton rows={6} cols={5} className="p-4" />
           ) : filtered.length === 0 ? (
-            <div className="p-12 text-center text-sm text-muted-foreground">
-              {employees.length === 0 ? "No employees yet." : "No employees match your filters."}
-            </div>
+            employees.length === 0 ? <EmployeesEmpty /> : (
+              <div className="p-12 text-center text-sm text-muted-foreground">No employees match your filters.</div>
+            )
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -241,6 +231,7 @@ const Employees = () => {
           )}
         </CardContent>
       </Card>
+      )}
 
       <AddEmployeeSheet open={sheetOpen} onOpenChange={setSheetOpen} onCreated={fetchEmployees} />
       <IssueFineModal

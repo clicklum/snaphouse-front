@@ -1,13 +1,15 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiFetch } from "@/lib/api";
+import { getRole } from "@/lib/auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
+import { TableSkeleton } from "@/components/PageSkeletons";
+import { ShowsEmpty, PageError } from "@/components/PageStates";
 import {
   Select,
   SelectContent,
@@ -62,36 +64,24 @@ const getInitials = (name: string) =>
     .toUpperCase()
     .slice(0, 2);
 
-const TableSkeleton = () => (
-  <div className="space-y-3">
-    {Array.from({ length: 6 }).map((_, i) => (
-      <div key={i} className="flex items-center gap-4 py-3">
-        <Skeleton className="h-4 w-32" />
-        <Skeleton className="h-8 w-8 rounded-full" />
-        <Skeleton className="h-4 w-20" />
-        <Skeleton className="h-4 w-16" />
-        <Skeleton className="h-4 w-12" />
-        <Skeleton className="h-3 w-24 rounded-full" />
-        <Skeleton className="h-5 w-16 rounded-full" />
-        <Skeleton className="h-6 w-6 rounded" />
-      </div>
-    ))}
-  </div>
-);
 
 const Shows = () => {
   const navigate = useNavigate();
+  const role = getRole();
+  const canCreate = ["admin", "floor_manager", "team_lead"].includes(role);
   const [shows, setShows] = useState<Show[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const fetchShows = () => {
     setLoading(true);
+    setError(null);
     apiFetch<Show[]>("/api/shows")
       .then(setShows)
-      .catch(() => toast.error("Failed to load shows"))
+      .catch((e) => setError(e.message || "Failed to load shows"))
       .finally(() => setLoading(false));
   };
 
@@ -166,16 +156,19 @@ const Shows = () => {
       </div>
 
       {/* Table */}
+      {error ? (
+        <PageError message={error} onRetry={fetchShows} />
+      ) : (
       <Card className="border-border">
         <CardContent className="p-0">
           {loading ? (
-            <div className="p-6">
-              <TableSkeleton />
-            </div>
+            <TableSkeleton rows={6} cols={5} className="p-4" />
           ) : filtered.length === 0 ? (
-            <div className="p-12 text-center text-sm text-muted-foreground">
-              {shows.length === 0 ? "No shows yet. Create your first show." : "No shows match your filters."}
-            </div>
+            shows.length === 0 ? (
+              <ShowsEmpty onCreateShow={canCreate ? () => setSheetOpen(true) : undefined} />
+            ) : (
+              <div className="p-12 text-center text-sm text-muted-foreground">No shows match your filters.</div>
+            )
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -281,6 +274,7 @@ const Shows = () => {
           )}
         </CardContent>
       </Card>
+      )}
 
       {/* New Show Sheet */}
       <NewShowSheet

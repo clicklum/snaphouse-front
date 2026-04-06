@@ -2,7 +2,8 @@ import { useEffect, useState, useCallback } from "react";
 import { apiFetch } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { StatCardSkeleton, TableSkeleton as TableSkeletonShared } from "@/components/PageSkeletons";
+import { AnalyticsEmpty, PageError } from "@/components/PageStates";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -76,34 +77,8 @@ const ranges = [
   { value: "90", label: "Last 90 days" },
 ];
 
-// ---------- skeletons ----------
-
-const StatSkeleton = () => (
-  <Card className="border-border">
-    <CardHeader className="flex flex-row items-center justify-between pb-2">
-      <Skeleton className="h-4 w-24" />
-      <Skeleton className="h-4 w-4" />
-    </CardHeader>
-    <CardContent>
-      <Skeleton className="h-8 w-20 mb-1" />
-      <Skeleton className="h-3 w-16" />
-    </CardContent>
-  </Card>
-);
-
-const TableSkeleton = () => (
-  <div className="space-y-3">
-    {Array.from({ length: 5 }).map((_, i) => (
-      <div key={i} className="flex gap-4 items-center">
-        <Skeleton className="h-4 w-6" />
-        <Skeleton className="h-4 flex-1" />
-        <Skeleton className="h-4 w-16" />
-        <Skeleton className="h-4 w-12" />
-        <Skeleton className="h-5 w-14 rounded-full" />
-      </div>
-    ))}
-  </div>
-);
+// Use shared skeletons — local aliases
+const TableSkeleton = () => <TableSkeletonShared rows={5} cols={5} />;
 
 // ---------- component ----------
 
@@ -113,9 +88,9 @@ const Analytics = () => {
   const [shows, setShows] = useState<ShowOption[]>([]);
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
 
-  // Fetch show list once
   useEffect(() => {
     apiFetch<ShowOption[]>("/api/shows")
       .then((res) => {
@@ -128,9 +103,10 @@ const Analytics = () => {
 
   const fetchData = useCallback(() => {
     setLoading(true);
+    setError(null);
     apiFetch<AnalyticsData>(`/api/analytics?range=${range}&show=${showFilter}`)
       .then(setData)
-      .catch(() => toast.error("Failed to load analytics"))
+      .catch((e) => setError(e.message || "Failed to load analytics"))
       .finally(() => setLoading(false));
   }, [range, showFilter]);
 
@@ -223,10 +199,17 @@ const Analytics = () => {
         </Select>
       </div>
 
+      {/* Content */}
+      {error ? (
+        <PageError message={error} onRetry={fetchData} />
+      ) : !loading && !data?.editorLeaderboard?.length && !data?.researcherLeaderboard?.length ? (
+        <AnalyticsEmpty />
+      ) : (
+      <>
       {/* Stat Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {loading
-          ? Array.from({ length: 4 }).map((_, i) => <StatSkeleton key={i} />)
+          ? Array.from({ length: 4 }).map((_, i) => <StatCardSkeleton key={i} />)
           : stats?.map((s) => (
               <Card key={s.label} className="border-border">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -345,6 +328,8 @@ const Analytics = () => {
           </CardContent>
         </Card>
       </div>
+      </>
+      )}
     </div>
   );
 };

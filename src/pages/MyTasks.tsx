@@ -5,7 +5,7 @@ import type { Task } from "@/lib/types";
 import TaskDetailDrawer from "@/components/TaskDetailDrawer";
 import KanbanCard from "@/components/KanbanCard";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { PageError, MyTasksEmpty } from "@/components/PageStates";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -57,11 +57,14 @@ const MyTasks = () => {
   const userName = getUserName() || "there";
   const today = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 
+  const [error, setError] = useState<string | null>(null);
+
   const fetchTasks = useCallback(() => {
     setLoading(true);
+    setError(null);
     apiFetch<MyTask[]>("/api/tasks/my")
       .then(setTasks)
-      .catch(() => toast.error("Failed to load your tasks"))
+      .catch((e) => setError(e.message || "Failed to load your tasks"))
       .finally(() => setLoading(false));
   }, []);
 
@@ -200,9 +203,11 @@ const MyTasks = () => {
         </Select>
       </div>
 
-      {loading ? (
+      {error ? (
+        <PageError message={error} onRetry={fetchTasks} />
+      ) : loading ? (
         <div className="space-y-4">
-          {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-20 w-full rounded-lg" />)}
+          {Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-20 w-full rounded-lg bg-muted animate-pulse" />)}
         </div>
       ) : (
         <div className="space-y-6">
@@ -269,7 +274,7 @@ const MyTasks = () => {
           )}
 
           {active.length === 0 && completedRecent.length === 0 && (
-            <p className="text-center text-muted-foreground py-12">No tasks assigned to you right now.</p>
+            <MyTasksEmpty />
           )}
         </div>
       )}

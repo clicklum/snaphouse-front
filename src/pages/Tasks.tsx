@@ -18,7 +18,8 @@ import KanbanCard from "@/components/KanbanCard";
 import TaskDetailDrawer from "@/components/TaskDetailDrawer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { KanbanColumnSkeleton } from "@/components/PageSkeletons";
+import { TasksEmpty, PageError } from "@/components/PageStates";
 import {
   Select,
   SelectContent,
@@ -50,11 +51,14 @@ const Tasks = () => {
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
+  const [error, setError] = useState<string | null>(null);
+
   const fetchTasks = useCallback(() => {
     setLoading(true);
+    setError(null);
     apiFetch<Task[]>("/api/tasks")
       .then(setTasks)
-      .catch(() => toast.error("Failed to load tasks"))
+      .catch((e) => setError(e.message || "Failed to load tasks"))
       .finally(() => setLoading(false));
   }, []);
 
@@ -230,19 +234,16 @@ const Tasks = () => {
       </div>
 
       {/* Board */}
-      {loading ? (
+      {error ? (
+        <PageError message={error} onRetry={fetchTasks} />
+      ) : loading ? (
         <div className="flex gap-4 overflow-x-auto pb-4 flex-1">
           {KANBAN_STAGES.map((stage) => (
-            <div key={stage.id} className="min-w-[280px] w-[280px] shrink-0 space-y-3">
-              <Skeleton className="h-6 w-24" />
-              <div className="space-y-2 p-2 rounded-lg bg-muted/30 min-h-[200px]">
-                {Array.from({ length: 2 }).map((_, i) => (
-                  <Skeleton key={i} className="h-24 w-full rounded-lg" />
-                ))}
-              </div>
-            </div>
+            <KanbanColumnSkeleton key={stage.id} cards={2} />
           ))}
         </div>
+      ) : tasks.length === 0 ? (
+        <TasksEmpty />
       ) : (
         <DndContext
           sensors={sensors}
