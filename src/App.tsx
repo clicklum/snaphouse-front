@@ -24,6 +24,7 @@ import Leaves from "@/pages/Leaves";
 import ShowAnalytics from "@/pages/ShowAnalytics";
 import TeamAnalytics from "@/pages/TeamAnalytics";
 import SnapchatAnalytics from "@/pages/SnapchatAnalytics";
+import AdminUsers from "@/pages/AdminUsers";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
