@@ -231,6 +231,7 @@ const Employees = () => {
           )}
         </CardContent>
       </Card>
+      )}
 
       <AddEmployeeSheet open={sheetOpen} onOpenChange={setSheetOpen} onCreated={fetchEmployees} />
       <IssueFineModal
