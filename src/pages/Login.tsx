@@ -57,6 +57,9 @@ const Login = () => {
       if (res.status === 403) { toast.error("Access denied. Use Slack login instead."); return; }
       if (!res.ok) throw new Error(data.message || "Login failed");
       setToken(data.token);
+      if (data.role) setRole(data.role);
+      if (data.name) localStorage.setItem("snaphouse_user_name", data.name);
+      if (data.email) localStorage.setItem("snaphouse_user_email", data.email);
       navigate("/dashboard", { replace: true });
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Login failed");
