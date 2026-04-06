@@ -50,44 +50,7 @@ const formatNumber = (n: number): string => {
   return n.toString();
 };
 
-const StatCardSkeleton = () => (
-  <Card className="border-border">
-    <CardHeader className="flex flex-row items-center justify-between pb-2">
-      <Skeleton className="h-4 w-24" />
-      <Skeleton className="h-4 w-4 rounded" />
-    </CardHeader>
-    <CardContent>
-      <Skeleton className="h-8 w-16 mb-1" />
-      <Skeleton className="h-3 w-20" />
-    </CardContent>
-  </Card>
-);
-
-const TableSkeleton = () => (
-  <div className="space-y-3">
-    {Array.from({ length: 5 }).map((_, i) => (
-      <div key={i} className="flex items-center gap-4">
-        <Skeleton className="h-4 flex-1" />
-        <Skeleton className="h-5 w-20 rounded-full" />
-        <Skeleton className="h-4 w-24" />
-      </div>
-    ))}
-  </div>
-);
-
-const ChartSkeleton = () => (
-  <div className="space-y-3">
-    <div className="flex items-end gap-2 h-48">
-      {Array.from({ length: 7 }).map((_, i) => (
-        <Skeleton
-          key={i}
-          className="flex-1 rounded-t"
-          style={{ height: `${30 + Math.random() * 70}%` }}
-        />
-      ))}
-    </div>
-  </div>
-);
+/* Skeletons use shared components now */
 
 const statIcons = [Film, Users, Eye, TrendingUp];
 const statLabels = ["Active Shows", "Total Employees", "Total Views (30d)", "Avg Retention %"];
