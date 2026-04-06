@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { setToken } from "@/lib/auth";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { setToken, setRole } from "@/lib/auth";
 import { API_BASE } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,13 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [domainError, setDomainError] = useState("");
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("session") === "expired") {
+      toast.error("Your session has expired. Please sign in again.");
+    }
+  }, [searchParams]);
 
   const validateDomain = (value: string) => {
     if (!value.includes("@")) { setDomainError(""); return; }
@@ -50,6 +57,9 @@ const Login = () => {
       if (res.status === 403) { toast.error("Access denied. Use Slack login instead."); return; }
       if (!res.ok) throw new Error(data.message || "Login failed");
       setToken(data.token);
+      if (data.role) setRole(data.role);
+      if (data.name) localStorage.setItem("snaphouse_user_name", data.name);
+      if (data.email) localStorage.setItem("snaphouse_user_email", data.email);
       navigate("/dashboard", { replace: true });
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Login failed");
