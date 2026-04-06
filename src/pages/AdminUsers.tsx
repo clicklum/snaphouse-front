@@ -94,7 +94,7 @@ const formatRole = (role: string) => role.replace(/_/g, " ").replace(/\b\w/g, c 
 /* ══════ Component ══════ */
 const AdminUsers = () => {
   const role = getRole();
-  if (role !== "admin") return <Navigate to="/" replace />;
+  const isAdmin = role === "admin";
 
   const [mgmtUsers, setMgmtUsers] = useState<ManagementUser[]>([]);
   const [slackUsers, setSlackUsers] = useState<SlackEmployee[]>([]);
