@@ -18,7 +18,8 @@ import KanbanCard from "@/components/KanbanCard";
 import TaskDetailDrawer from "@/components/TaskDetailDrawer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { KanbanColumnSkeleton } from "@/components/PageSkeletons";
+import { TasksEmpty, PageError } from "@/components/PageStates";
 import {
   Select,
   SelectContent,
