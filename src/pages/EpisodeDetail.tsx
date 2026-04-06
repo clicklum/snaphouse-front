@@ -273,8 +273,8 @@ const EpisodeDetail = () => {
               {([
                 { key: "researcher", label: "Researcher", person: data.assignments.researcher, deadline: data.assignments.researcher.deadline },
                 { key: "editor", label: "Editor", person: data.assignments.editor, deadline: data.assignments.editor.deadline },
-                { key: "qa", label: "QA Reviewer", person: data.assignments.qa },
-                { key: "verifier", label: "Verifier", person: data.assignments.verifier },
+                { key: "qa", label: "QA Reviewer", person: data.assignments.qa, deadline: undefined as string | undefined },
+                { key: "verifier", label: "Verifier", person: data.assignments.verifier, deadline: undefined as string | undefined },
               ] as const).map(({ key, label, person, deadline }) => (
                 <div key={key} className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
