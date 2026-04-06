@@ -57,11 +57,14 @@ const MyTasks = () => {
   const userName = getUserName() || "there";
   const today = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 
+  const [error, setError] = useState<string | null>(null);
+
   const fetchTasks = useCallback(() => {
     setLoading(true);
+    setError(null);
     apiFetch<MyTask[]>("/api/tasks/my")
       .then(setTasks)
-      .catch(() => toast.error("Failed to load your tasks"))
+      .catch((e) => setError(e.message || "Failed to load your tasks"))
       .finally(() => setLoading(false));
   }, []);
 
