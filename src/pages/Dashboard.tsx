@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { StatCardSkeleton, TableSkeleton, ChartSkeleton } from "@/components/PageSkeletons";
+import { PageError } from "@/components/PageStates";
 import { Badge } from "@/components/ui/badge";
 import { Film, Users, Eye, TrendingUp } from "lucide-react";
 import { apiFetch } from "@/lib/api";
