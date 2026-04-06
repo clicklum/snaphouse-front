@@ -21,6 +21,7 @@ import Payroll from "@/pages/Payroll";
 import SettingsPage from "@/pages/SettingsPage";
 import EpisodeDetail from "@/pages/EpisodeDetail";
 import Leaves from "@/pages/Leaves";
+import ShowAnalytics from "@/pages/ShowAnalytics";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
