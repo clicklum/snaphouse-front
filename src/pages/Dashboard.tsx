@@ -63,10 +63,13 @@ const Dashboard = () => {
   const [loadingEpisodes, setLoadingEpisodes] = useState(true);
   const [loadingWeekly, setLoadingWeekly] = useState(true);
 
-  useEffect(() => {
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchAll = () => {
+    setError(null);
     apiFetch<SummaryData>("/api/analytics/summary")
       .then(setSummary)
-      .catch(() => {})
+      .catch((e) => setError(e.message || "Failed to load dashboard"))
       .finally(() => setLoadingSummary(false));
 
     apiFetch<Episode[]>("/api/episodes/today")
@@ -78,7 +81,9 @@ const Dashboard = () => {
       .then(setWeekly)
       .catch(() => {})
       .finally(() => setLoadingWeekly(false));
-  }, []);
+  };
+
+  useEffect(() => { fetchAll(); }, []);
 
   const statValues = summary
     ? [
