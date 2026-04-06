@@ -1,4 +1,5 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
+import IssueFineModal from "@/components/IssueFineModal";
 import { useParams, Link } from "react-router-dom";
 import { apiFetch } from "@/lib/api";
 import { getRole } from "@/lib/auth";
