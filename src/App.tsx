@@ -64,6 +64,7 @@ const App = () => (
             <Route path="/payroll" element={<Payroll />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/admin/settings" element={<SettingsPage />} />
+            <Route path="/admin/users" element={<AdminUsers />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -236,6 +236,8 @@ const AdminUsers = () => {
 
   const pendingCount = slackUsers.filter(u => u.role === "pending").length;
 
+  if (!isAdmin) return <Navigate to="/" replace />;
+
   if (loading) {
     return (
       <div className="space-y-6">
