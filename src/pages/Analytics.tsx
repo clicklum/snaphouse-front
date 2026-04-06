@@ -114,9 +114,9 @@ const Analytics = () => {
   const [shows, setShows] = useState<ShowOption[]>([]);
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
 
-  // Fetch show list once
   useEffect(() => {
     apiFetch<ShowOption[]>("/api/shows")
       .then((res) => {
@@ -129,9 +129,10 @@ const Analytics = () => {
 
   const fetchData = useCallback(() => {
     setLoading(true);
+    setError(null);
     apiFetch<AnalyticsData>(`/api/analytics?range=${range}&show=${showFilter}`)
       .then(setData)
-      .catch(() => toast.error("Failed to load analytics"))
+      .catch((e) => setError(e.message || "Failed to load analytics"))
       .finally(() => setLoading(false));
   }, [range, showFilter]);
 
