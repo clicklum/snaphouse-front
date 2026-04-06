@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import MobileTabBar from "@/components/MobileTabBar";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Bell, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useNotifications } from "@/hooks/use-notifications";
 import NotificationsPanel from "@/components/NotificationsPanel";
 import GlobalSearch, { trackPageVisit } from "@/components/GlobalSearch";
@@ -15,6 +17,7 @@ const AppLayout = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   const {
     notifications,
@@ -58,26 +61,48 @@ const AppLayout = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
-        <AppSidebar />
+        {/* Desktop sidebar — hidden on mobile */}
+        <div className="hidden md:block">
+          <AppSidebar />
+        </div>
+
         <div className="flex-1 flex flex-col min-w-0">
           <header className="h-14 flex items-center justify-between border-b border-border px-4 bg-card/50 backdrop-blur-sm sticky top-0 z-10">
             <div className="flex items-center gap-2">
-              <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
+              {/* Sidebar trigger only on desktop */}
+              <SidebarTrigger className="text-muted-foreground hover:text-foreground hidden md:flex" />
+              {/* Mobile logo */}
+              {isMobile && (
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-display text-xs font-bold text-primary-foreground">
+                  SH
+                </div>
+              )}
             </div>
-            <div className="flex items-center gap-3">
-              {/* Search trigger */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="gap-2 text-muted-foreground hover:text-foreground h-9 px-3"
-                onClick={() => setSearchOpen(true)}
-              >
-                <Search className="h-4 w-4" />
-                <span className="text-xs hidden sm:inline">Search</span>
-                <kbd className="hidden sm:inline-flex h-5 items-center gap-0.5 rounded border border-border bg-muted px-1.5 text-[10px] font-medium text-muted-foreground">
-                  ⌘K
-                </kbd>
-              </Button>
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Search — icon only on mobile, full button on desktop */}
+              {isMobile ? (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                  onClick={() => setSearchOpen(true)}
+                >
+                  <Search className="h-4.5 w-4.5" />
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="gap-2 text-muted-foreground hover:text-foreground h-9 px-3"
+                  onClick={() => setSearchOpen(true)}
+                >
+                  <Search className="h-4 w-4" />
+                  <span className="text-xs">Search</span>
+                  <kbd className="hidden sm:inline-flex h-5 items-center gap-0.5 rounded border border-border bg-muted px-1.5 text-[10px] font-medium text-muted-foreground">
+                    ⌘K
+                  </kbd>
+                </Button>
+              )}
               {/* Notification Bell */}
               <Button
                 variant="ghost"
@@ -97,7 +122,10 @@ const AppLayout = () => {
                   </span>
                 )}
               </Button>
-              <ThemeToggle />
+              {/* Theme toggle hidden on mobile for space */}
+              <div className="hidden sm:block">
+                <ThemeToggle />
+              </div>
               <Avatar className="h-8 w-8 border border-border">
                 <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
                   SJ
@@ -105,11 +133,14 @@ const AppLayout = () => {
               </Avatar>
             </div>
           </header>
-          <main className="flex-1 p-6 animate-fade-in">
+          <main className="flex-1 p-4 sm:p-6 animate-fade-in pb-20 md:pb-6">
             <Outlet />
           </main>
         </div>
       </div>
+
+      {/* Mobile bottom tab bar */}
+      <MobileTabBar />
 
       <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
 

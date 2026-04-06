@@ -199,7 +199,7 @@ const GlobalSearch = ({ open, onOpenChange }: Props) => {
       <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => onOpenChange(false)} />
 
       {/* Content */}
-      <div className="relative mx-auto mt-[10vh] w-full max-w-2xl flex flex-col max-h-[70vh] rounded-xl border border-border bg-card shadow-2xl overflow-hidden">
+      <div className="relative mx-auto mt-[5vh] sm:mt-[10vh] w-full max-w-2xl flex flex-col max-h-[85vh] sm:max-h-[70vh] mx-2 sm:mx-auto rounded-xl border border-border bg-card shadow-2xl overflow-hidden">
         {/* Search input */}
         <div className="flex items-center gap-3 px-5 border-b border-border">
           <Search className="h-5 w-5 text-muted-foreground shrink-0" />

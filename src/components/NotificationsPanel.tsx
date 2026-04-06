@@ -97,7 +97,7 @@ const NotificationsPanel = ({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-md p-0 flex flex-col">
+      <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col">
         {/* Header */}
         <SheetHeader className="px-5 pt-5 pb-3 border-b border-border">
           <div className="flex items-center justify-between">
