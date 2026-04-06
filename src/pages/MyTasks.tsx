@@ -272,7 +272,7 @@ const MyTasks = () => {
           )}
 
           {active.length === 0 && completedRecent.length === 0 && (
-            <p className="text-center text-muted-foreground py-12">No tasks assigned to you right now.</p>
+            <MyTasksEmpty />
           )}
         </div>
       )}

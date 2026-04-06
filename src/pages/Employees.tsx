@@ -59,9 +59,10 @@ const Employees = () => {
 
   const fetchEmployees = () => {
     setLoading(true);
+    setError(null);
     apiFetch<Employee[]>("/api/employees")
       .then(setEmployees)
-      .catch(() => toast.error("Failed to load employees"))
+      .catch((e) => setError(e.message || "Failed to load employees"))
       .finally(() => setLoading(false));
   };
 
