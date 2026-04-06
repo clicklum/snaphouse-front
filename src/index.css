@@ -53,48 +53,59 @@
   }
 
   .dark {
-    --background: 224 30% 6%;
-    --foreground: 220 14% 92%;
+    /* Main backgrounds — warm dark tones */
+    --background: 60 7% 8%;
+    --foreground: 47 18% 88%;
 
-    --card: 224 25% 10%;
-    --card-foreground: 220 14% 92%;
+    /* Cards — slightly elevated surface */
+    --card: 60 6% 12%;
+    --card-foreground: 47 18% 88%;
 
-    --popover: 224 25% 10%;
-    --popover-foreground: 220 14% 92%;
+    /* Popovers match cards */
+    --popover: 60 6% 12%;
+    --popover-foreground: 47 18% 88%;
 
+    /* Gold primary stays */
     --primary: 38 92% 50%;
     --primary-foreground: 0 0% 5%;
 
-    --secondary: 224 20% 16%;
-    --secondary-foreground: 220 14% 90%;
+    /* Secondary — muted warm surface */
+    --secondary: 60 5% 16%;
+    --secondary-foreground: 47 12% 85%;
 
-    --muted: 224 20% 14%;
-    --muted-foreground: 220 10% 50%;
+    /* Muted — subtle backgrounds */
+    --muted: 60 4% 14%;
+    --muted-foreground: 45 5% 57%;
 
-    --accent: 224 25% 14%;
+    /* Accent */
+    --accent: 60 5% 15%;
     --accent-foreground: 38 92% 50%;
 
+    /* Destructive */
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 224 20% 16%;
-    --input: 224 20% 16%;
+    /* Borders — subtle warm white */
+    --border: 60 5% 18%;
+    --input: 60 5% 16%;
     --ring: 38 92% 50%;
 
-    --sidebar-background: 224 32% 5%;
-    --sidebar-foreground: 220 14% 65%;
+    /* Sidebar — darkest surface */
+    --sidebar-background: 60 7% 9%;
+    --sidebar-foreground: 45 5% 57%;
     --sidebar-primary: 38 92% 50%;
     --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 224 25% 12%;
-    --sidebar-accent-foreground: 220 14% 90%;
-    --sidebar-border: 224 20% 12%;
+    --sidebar-accent: 60 5% 13%;
+    --sidebar-accent-foreground: 47 12% 85%;
+    --sidebar-border: 60 5% 14%;
     --sidebar-ring: 38 92% 50%;
-    --sidebar-muted: 220 10% 40%;
+    --sidebar-muted: 45 5% 42%;
 
+    /* Gold */
     --gold: 38 92% 50%;
     --gold-foreground: 0 0% 5%;
     --gold-muted: 38 30% 45%;
-    --surface-elevated: 224 25% 10%;
+    --surface-elevated: 60 6% 12%;
   }
 }
 
