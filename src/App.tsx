@@ -12,6 +12,7 @@ import Dashboard from "@/pages/Dashboard";
 import Shows from "@/pages/Shows";
 import ShowDetail from "@/pages/ShowDetail";
 import Tasks from "@/pages/Tasks";
+import MyTasks from "@/pages/MyTasks";
 import Analytics from "@/pages/Analytics";
 import Employees from "@/pages/Employees";
 import EmployeeDetail from "@/pages/EmployeeDetail";
