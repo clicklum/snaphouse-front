@@ -22,6 +22,7 @@ import SettingsPage from "@/pages/SettingsPage";
 import EpisodeDetail from "@/pages/EpisodeDetail";
 import Leaves from "@/pages/Leaves";
 import ShowAnalytics from "@/pages/ShowAnalytics";
+import TeamAnalytics from "@/pages/TeamAnalytics";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/tasks/my" element={<MyTasks />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/analytics/shows" element={<ShowAnalytics />} />
+            <Route path="/analytics/team" element={<TeamAnalytics />} />
             <Route path="/employees" element={<Employees />} />
             <Route path="/employees/:id" element={<EmployeeDetail />} />
             <Route path="/attendance" element={<Attendance />} />
