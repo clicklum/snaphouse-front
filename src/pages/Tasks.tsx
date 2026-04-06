@@ -275,9 +275,10 @@ const Tasks = () => {
 
       {/* Detail Drawer */}
       <TaskDetailDrawer
-        task={detailTask}
+        taskId={detailTask?.id || null}
         open={drawerOpen}
         onOpenChange={setDrawerOpen}
+        onUpdated={fetchTasks}
       />
     </div>
   );
