@@ -2,7 +2,8 @@ import { useEffect, useState, useCallback } from "react";
 import { apiFetch } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { StatCardSkeleton, TableSkeleton as TableSkeletonShared } from "@/components/PageSkeletons";
+import { AnalyticsEmpty, PageError } from "@/components/PageStates";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
