@@ -1,4 +1,4 @@
-import { getToken, removeToken } from "./auth";
+import { getToken, clearSession } from "./auth";
 
 export const API_BASE = "https://api.dailyvertex.io";
 
@@ -14,8 +14,8 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
   });
 
   if (res.status === 401) {
-    removeToken();
-    window.location.href = "/login";
+    clearSession();
+    window.location.href = "/login?session=expired";
     throw new Error("Unauthorized");
   }
 

@@ -8,10 +8,12 @@ import {
   Wallet,
   Settings,
   LogOut,
+  AlertTriangle,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
-import { removeToken } from "@/lib/auth";
+import { clearSession, getRole, getUserName } from "@/lib/auth";
+import { getNavItemsForRole } from "@/lib/permissions";
 import {
   Sidebar,
   SidebarContent,
@@ -24,24 +26,16 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const navItems = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Shows", url: "/shows", icon: Film },
-  { title: "Tasks", url: "/tasks", icon: ListTodo },
-  { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "Employees", url: "/employees", icon: Users },
-  { title: "Attendance", url: "/attendance", icon: CalendarCheck },
-  { title: "Payroll", url: "/payroll", icon: Wallet },
-  { title: "Settings", url: "/settings", icon: Settings },
-];
-
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
+  const role = getRole();
+  const userName = getUserName();
+  const navItems = getNavItemsForRole(role);
 
   const handleLogout = () => {
-    removeToken();
+    clearSession();
     window.location.href = "/login";
   };
 
@@ -62,6 +56,14 @@ export function AppSidebar() {
           </div>
         )}
       </div>
+
+      {/* Pending role banner */}
+      {role === "pending" && !collapsed && (
+        <div className="mx-3 mt-3 flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
+          <AlertTriangle className="h-4 w-4 shrink-0 text-amber-500 mt-0.5" />
+          <p className="text-xs text-amber-500">Your account is being set up. Your manager will assign your role shortly.</p>
+        </div>
+      )}
 
       <SidebarContent className="px-2 py-3">
         <SidebarGroup>
@@ -97,6 +99,12 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border p-2">
+        {!collapsed && userName && (
+          <div className="px-3 py-2">
+            <p className="text-xs font-medium text-sidebar-accent-foreground truncate">{userName}</p>
+            <p className="text-[11px] text-sidebar-muted capitalize">{role.replace("_", " ")}</p>
+          </div>
+        )}
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
