@@ -5,7 +5,7 @@ import type { Task } from "@/lib/types";
 import TaskDetailDrawer from "@/components/TaskDetailDrawer";
 import KanbanCard from "@/components/KanbanCard";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { PageError, MyTasksEmpty } from "@/components/PageStates";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
