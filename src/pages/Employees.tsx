@@ -50,6 +50,7 @@ const Employees = () => {
   const canFine = ["admin", "floor_manager"].includes(role);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("All Roles");
   const [sheetOpen, setSheetOpen] = useState(false);
