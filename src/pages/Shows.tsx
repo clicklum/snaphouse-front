@@ -64,22 +64,6 @@ const getInitials = (name: string) =>
     .toUpperCase()
     .slice(0, 2);
 
-const TableSkeleton = () => (
-  <div className="space-y-3">
-    {Array.from({ length: 6 }).map((_, i) => (
-      <div key={i} className="flex items-center gap-4 py-3">
-        <Skeleton className="h-4 w-32" />
-        <Skeleton className="h-8 w-8 rounded-full" />
-        <Skeleton className="h-4 w-20" />
-        <Skeleton className="h-4 w-16" />
-        <Skeleton className="h-4 w-12" />
-        <Skeleton className="h-3 w-24 rounded-full" />
-        <Skeleton className="h-5 w-16 rounded-full" />
-        <Skeleton className="h-6 w-6 rounded" />
-      </div>
-    ))}
-  </div>
-);
 
 const Shows = () => {
   const navigate = useNavigate();
