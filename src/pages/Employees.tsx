@@ -139,14 +139,17 @@ const Employees = () => {
       </div>
 
       {/* Table */}
+      {error ? (
+        <PageError message={error} onRetry={fetchEmployees} />
+      ) : (
       <Card className="border-border">
         <CardContent className="p-0">
           {loading ? (
-            <TableSkeleton />
+            <TableSkeleton rows={6} cols={5} className="p-4" />
           ) : filtered.length === 0 ? (
-            <div className="p-12 text-center text-sm text-muted-foreground">
-              {employees.length === 0 ? "No employees yet." : "No employees match your filters."}
-            </div>
+            employees.length === 0 ? <EmployeesEmpty /> : (
+              <div className="p-12 text-center text-sm text-muted-foreground">No employees match your filters.</div>
+            )
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
