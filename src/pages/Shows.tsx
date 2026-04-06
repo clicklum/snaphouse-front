@@ -156,16 +156,19 @@ const Shows = () => {
       </div>
 
       {/* Table */}
+      {error ? (
+        <PageError message={error} onRetry={fetchShows} />
+      ) : (
       <Card className="border-border">
         <CardContent className="p-0">
           {loading ? (
-            <div className="p-6">
-              <TableSkeleton />
-            </div>
+            <TableSkeleton rows={6} cols={5} className="p-4" />
           ) : filtered.length === 0 ? (
-            <div className="p-12 text-center text-sm text-muted-foreground">
-              {shows.length === 0 ? "No shows yet. Create your first show." : "No shows match your filters."}
-            </div>
+            shows.length === 0 ? (
+              <ShowsEmpty onCreateShow={canCreate ? () => setSheetOpen(true) : undefined} />
+            ) : (
+              <div className="p-12 text-center text-sm text-muted-foreground">No shows match your filters.</div>
+            )
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
