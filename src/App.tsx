@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import AuthGuard from "@/components/AuthGuard";
 import AppLayout from "@/components/AppLayout";
 import Login from "@/pages/Login";
+import SlackLogin from "@/pages/SlackLogin";
 import Dashboard from "@/pages/Dashboard";
 import Shows from "@/pages/Shows";
 import ShowDetail from "@/pages/ShowDetail";
