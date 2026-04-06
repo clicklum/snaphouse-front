@@ -566,7 +566,13 @@ const EmployeeDetail = () => {
       </Tabs>
 
       {/* Fine modal */}
-      <FineModal employeeId={id || ""} open={fineOpen} onOpenChange={setFineOpen} onCreated={fetchProfile} />
+      <IssueFineModal
+        open={fineOpen}
+        onOpenChange={setFineOpen}
+        employeeId={id || ""}
+        employeeName={profile.name}
+        onCreated={fetchProfile}
+      />
     </div>
   );
 };
