@@ -243,6 +243,13 @@ const Employees = () => {
       </Card>
 
       <AddEmployeeSheet open={sheetOpen} onOpenChange={setSheetOpen} onCreated={fetchEmployees} />
+      <IssueFineModal
+        open={fineOpen}
+        onOpenChange={setFineOpen}
+        employeeId={fineTarget?.id}
+        employeeName={fineTarget?.name}
+        onCreated={fetchEmployees}
+      />
     </div>
   );
 };
