@@ -43,22 +43,6 @@ const roleBadgeVariant = (role: string) => {
 
 const allRoles = ["All Roles", "Admin", "Floor Manager", "Team Lead", "Researcher", "Editor", "QA", "Uploader"];
 
-const TableSkeleton = () => (
-  <div className="space-y-3 p-6">
-    {Array.from({ length: 6 }).map((_, i) => (
-      <div key={i} className="flex items-center gap-4">
-        <Skeleton className="h-9 w-9 rounded-full" />
-        <Skeleton className="h-4 flex-1" />
-        <Skeleton className="h-5 w-16 rounded-full" />
-        <Skeleton className="h-4 w-10" />
-        <Skeleton className="h-4 w-10" />
-        <Skeleton className="h-4 w-14" />
-        <Skeleton className="h-5 w-16 rounded-full" />
-        <Skeleton className="h-6 w-6 rounded" />
-      </div>
-    ))}
-  </div>
-);
 
 const Employees = () => {
   const navigate = useNavigate();
