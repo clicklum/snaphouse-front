@@ -12,6 +12,7 @@ import Dashboard from "@/pages/Dashboard";
 import Shows from "@/pages/Shows";
 import ShowDetail from "@/pages/ShowDetail";
 import Tasks from "@/pages/Tasks";
+import MyTasks from "@/pages/MyTasks";
 import Analytics from "@/pages/Analytics";
 import Employees from "@/pages/Employees";
 import EmployeeDetail from "@/pages/EmployeeDetail";
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/shows/:id" element={<ShowDetail />} />
             <Route path="/episodes/:id" element={<EpisodeDetail />} />
             <Route path="/tasks" element={<Tasks />} />
+            <Route path="/tasks/my" element={<MyTasks />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/employees" element={<Employees />} />
             <Route path="/employees/:id" element={<EmployeeDetail />} />
