@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiFetch } from "@/lib/api";
+import { getRole } from "@/lib/auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,21 +9,15 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Plus, Search, MoreHorizontal, User, AlertTriangle, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import AddEmployeeSheet from "@/components/AddEmployeeSheet";
+import IssueFineModal from "@/components/IssueFineModal";
 
 interface Employee {
   id: string;
@@ -66,11 +61,15 @@ const TableSkeleton = () => (
 
 const Employees = () => {
   const navigate = useNavigate();
+  const role = getRole();
+  const canFine = ["admin", "floor_manager"].includes(role);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("All Roles");
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [fineOpen, setFineOpen] = useState(false);
+  const [fineTarget, setFineTarget] = useState<{ id: string; name: string } | null>(null);
 
   const fetchEmployees = () => {
     setLoading(true);
@@ -100,14 +99,9 @@ const Employees = () => {
     return list;
   }, [employees, search, roleFilter]);
 
-  const handleIssueFine = async (id: string) => {
-    try {
-      await apiFetch(`/api/employees/${id}/fine`, { method: "POST", body: JSON.stringify({}) });
-      toast.success("Fine issued");
-      fetchEmployees();
-    } catch (err: any) {
-      toast.error(err.message || "Failed to issue fine");
-    }
+  const openFineModal = (emp: Employee) => {
+    setFineTarget({ id: emp.id, name: emp.name });
+    setFineOpen(true);
   };
 
   const handleDeactivate = async (id: string) => {
@@ -226,10 +220,12 @@ const Employees = () => {
                               <User className="h-4 w-4 mr-2" />
                               View Profile
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleIssueFine(emp.id)}>
-                              <AlertTriangle className="h-4 w-4 mr-2" />
-                              Issue Fine
-                            </DropdownMenuItem>
+                            {canFine && (
+                              <DropdownMenuItem onClick={() => openFineModal(emp)}>
+                                <AlertTriangle className="h-4 w-4 mr-2" />
+                                Issue Fine
+                              </DropdownMenuItem>
+                            )}
                             <DropdownMenuItem onClick={() => handleDeactivate(emp.id)} className="text-destructive focus:text-destructive">
                               <XCircle className="h-4 w-4 mr-2" />
                               Deactivate
@@ -247,6 +243,13 @@ const Employees = () => {
       </Card>
 
       <AddEmployeeSheet open={sheetOpen} onOpenChange={setSheetOpen} onCreated={fetchEmployees} />
+      <IssueFineModal
+        open={fineOpen}
+        onOpenChange={setFineOpen}
+        employeeId={fineTarget?.id}
+        employeeName={fineTarget?.name}
+        onCreated={fetchEmployees}
+      />
     </div>
   );
 };

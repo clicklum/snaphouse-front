@@ -1,4 +1,5 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
+import IssueFineModal from "@/components/IssueFineModal";
 import { useParams, Link } from "react-router-dom";
 import { apiFetch } from "@/lib/api";
 import { getRole } from "@/lib/auth";
@@ -112,46 +113,7 @@ const MiniHeatmap = ({ days }: { days: AttendanceDay[] }) => {
   );
 };
 
-/* ── Fine modal ── */
-const FineModal = ({ employeeId, open, onOpenChange, onCreated }: { employeeId: string; open: boolean; onOpenChange: (o: boolean) => void; onCreated: () => void }) => {
-  const [amount, setAmount] = useState("");
-  const [reason, setReason] = useState("");
-  const [saving, setSaving] = useState(false);
 
-  const submit = async () => {
-    if (!amount || !reason.trim()) return;
-    setSaving(true);
-    try {
-      await apiFetch(`/api/employees/${employeeId}/fines`, { method: "POST", body: JSON.stringify({ amount: Number(amount), reason }) });
-      toast.success("Fine issued");
-      onOpenChange(false);
-      setAmount(""); setReason("");
-      onCreated();
-    } catch { toast.error("Failed to issue fine"); }
-    finally { setSaving(false); }
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Issue Fine</DialogTitle>
-          <DialogDescription>This will be deducted from the employee's next payroll.</DialogDescription>
-        </DialogHeader>
-        <div className="space-y-3 py-2">
-          <Input type="number" placeholder="Amount (₨)" value={amount} onChange={e => setAmount(e.target.value)} />
-          <Textarea placeholder="Reason for fine…" value={reason} onChange={e => setReason(e.target.value)} rows={3} />
-        </div>
-        <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button variant="destructive" onClick={submit} disabled={saving || !amount || !reason.trim()}>
-            {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Issue Fine
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-};
 
 /* ════════ Main component ════════ */
 const EmployeeDetail = () => {
@@ -604,7 +566,13 @@ const EmployeeDetail = () => {
       </Tabs>
 
       {/* Fine modal */}
-      <FineModal employeeId={id || ""} open={fineOpen} onOpenChange={setFineOpen} onCreated={fetchProfile} />
+      <IssueFineModal
+        open={fineOpen}
+        onOpenChange={setFineOpen}
+        employeeId={id || ""}
+        employeeName={profile.name}
+        onCreated={fetchProfile}
+      />
     </div>
   );
 };
