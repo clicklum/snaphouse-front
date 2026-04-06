@@ -174,7 +174,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-lg overflow-y-auto">
+      <SheetContent side="right" className="w-full sm:max-w-lg overflow-y-auto">
         {loading || !task ? (
           <div className="flex items-center justify-center h-64"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
         ) : (

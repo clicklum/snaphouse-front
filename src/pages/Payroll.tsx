@@ -116,7 +116,7 @@ const Payroll = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
         {loading ? Array.from({ length: 4 }).map((_, i) => <StatSkeleton key={i} />) : stats.map((s) => (
           <Card key={s.label}>
             <CardContent className="flex items-center gap-4 p-6">
