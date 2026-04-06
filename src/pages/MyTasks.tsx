@@ -203,9 +203,11 @@ const MyTasks = () => {
         </Select>
       </div>
 
-      {loading ? (
+      {error ? (
+        <PageError message={error} onRetry={fetchTasks} />
+      ) : loading ? (
         <div className="space-y-4">
-          {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-20 w-full rounded-lg" />)}
+          {Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-20 w-full rounded-lg bg-muted animate-pulse" />)}
         </div>
       ) : (
         <div className="space-y-6">
