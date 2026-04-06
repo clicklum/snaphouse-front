@@ -340,7 +340,7 @@ const Attendance = () => {
       </div>
 
       {/* ═══ Stats ═══ */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
         {loading ? Array.from({ length: 4 }).map((_, i) => <StatSkeleton key={i} />) :
           stats?.map(s => (
             <Card key={s.label} className="border-border">
