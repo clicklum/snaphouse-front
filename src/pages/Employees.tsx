@@ -61,11 +61,15 @@ const TableSkeleton = () => (
 
 const Employees = () => {
   const navigate = useNavigate();
+  const role = getRole();
+  const canFine = ["admin", "floor_manager"].includes(role);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("All Roles");
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [fineOpen, setFineOpen] = useState(false);
+  const [fineTarget, setFineTarget] = useState<{ id: string; name: string } | null>(null);
 
   const fetchEmployees = () => {
     setLoading(true);
