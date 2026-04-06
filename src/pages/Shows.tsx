@@ -67,17 +67,21 @@ const getInitials = (name: string) =>
 
 const Shows = () => {
   const navigate = useNavigate();
+  const role = getRole();
+  const canCreate = ["admin", "floor_manager", "team_lead"].includes(role);
   const [shows, setShows] = useState<Show[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const fetchShows = () => {
     setLoading(true);
+    setError(null);
     apiFetch<Show[]>("/api/shows")
       .then(setShows)
-      .catch(() => toast.error("Failed to load shows"))
+      .catch((e) => setError(e.message || "Failed to load shows"))
       .finally(() => setLoading(false));
   };
 
