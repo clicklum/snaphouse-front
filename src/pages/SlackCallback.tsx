@@ -25,7 +25,7 @@ const SlackCallback = () => {
 
     (async () => {
       try {
-        const res = await fetch(`${API_BASE}/auth/slack/callback`, {
+        const res = await fetch(`${API_ORIGIN}/auth/slack/callback`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ code }),
