@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { setToken } from "@/lib/auth";
-import { API_BASE } from "@/lib/api";
+import { API_ORIGIN } from "@/lib/api";
 import { Loader2, XCircle, CheckCircle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
