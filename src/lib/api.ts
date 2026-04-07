@@ -1,7 +1,7 @@
 import { getToken, setToken, getRefreshToken, clearSession } from "./auth";
 
 // ─── Base URL ────────────────────────────────────────────────
-export const API_BASE = import.meta.env.VITE_API_URL || "https://api.dailyvertex.io";
+export const API_BASE = import.meta.env.VITE_API_URL || "https://api.dailyvertex.io/api";
 
 // ─── Structured API Error ────────────────────────────────────
 export class ApiError extends Error {
