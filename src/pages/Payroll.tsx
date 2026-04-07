@@ -75,7 +75,7 @@ const Payroll = () => {
   const exportPdf = async () => {
     try {
       const token = getToken();
-      const res = await fetch(`${API_BASE}/api/payroll/export?month=${monthStr}`, {
+      const res = await fetch(`${API_BASE}/payroll/export?month=${monthStr}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (!res.ok) throw new Error();
