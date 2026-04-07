@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getRole } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Navigate } from "react-router-dom";
@@ -121,8 +121,8 @@ const AdminUsers = () => {
     setLoading(true);
     try {
       const [mgmt, slack] = await Promise.all([
-        apiFetch<ManagementUser[]>("/api/admin/users?type=management"),
-        apiFetch<SlackEmployee[]>("/api/admin/users?type=slack"),
+        api.get<ManagementUser[]>("/api/admin/users?type=management"),
+        api.get<SlackEmployee[]>("/api/admin/users?type=slack"),
       ]);
       setMgmtUsers(mgmt);
       setSlackUsers(slack);
@@ -186,7 +186,7 @@ const AdminUsers = () => {
   /* ── Reset password ── */
   const handleResetPassword = async (user: ManagementUser) => {
     try {
-      await apiFetch(`/api/admin/users/${user.id}/reset-password`, { method: "POST" });
+      await api.post(`/api/admin/users/${user.id}/reset-password`);
       toast.success(`Password reset email sent to ${user.email}`);
     } catch {
       toast.error("Failed to send password reset");
@@ -196,7 +196,7 @@ const AdminUsers = () => {
   /* ── Deactivate ── */
   const handleDeactivate = async (id: string, type: "mgmt" | "slack") => {
     try {
-      await apiFetch(`/api/admin/users/${id}/deactivate`, { method: "POST" });
+      await api.post(`/api/admin/users/${id}/deactivate`);
       toast.success("User deactivated — all tokens revoked");
       fetchData();
     } catch {
@@ -209,7 +209,7 @@ const AdminUsers = () => {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      await apiFetch(`/api/admin/users/${deleteTarget.id}`, { method: "DELETE" });
+      await api.delete(`/api/admin/users/${deleteTarget.id}`);
       toast.success("User deleted permanently");
       setDeleteTarget(null);
       fetchData();

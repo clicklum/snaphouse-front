@@ -5,7 +5,7 @@ import { PageError } from "@/components/PageStates";
 import { Badge } from "@/components/ui/badge";
 import { Film, Users, Eye, TrendingUp } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
@@ -43,9 +43,9 @@ const Dashboard = () => {
 
   const fetchAll = () => {
     setError(null);
-    apiFetch<SummaryData>("/api/analytics/summary").then(setSummary).catch((e) => setError(e.message || "Failed to load dashboard")).finally(() => setLoadingSummary(false));
-    apiFetch<Episode[]>("/api/episodes/today").then(setEpisodes).catch(() => {}).finally(() => setLoadingEpisodes(false));
-    apiFetch<WeeklyView[]>("/api/analytics/weekly").then(setWeekly).catch(() => {}).finally(() => setLoadingWeekly(false));
+    api.get<SummaryData>("/api/analytics/summary").then(setSummary).catch((e) => setError(e.message || "Failed to load dashboard")).finally(() => setLoadingSummary(false));
+    api.get<Episode[]>("/api/episodes/today").then(setEpisodes).catch(() => {}).finally(() => setLoadingEpisodes(false));
+    api.get<WeeklyView[]>("/api/analytics/weekly").then(setWeekly).catch(() => {}).finally(() => setLoadingWeekly(false));
   };
 
   useEffect(() => { fetchAll(); }, []);

@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getRole } from "@/lib/auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -64,7 +64,7 @@ const Shows = () => {
   const fetchShows = () => {
     setLoading(true);
     setError(null);
-    apiFetch<Show[]>("/api/shows")
+    api.get<Show[]>("/api/shows")
       .then(setShows)
       .catch((e) => setError(e.message || "Failed to load shows"))
       .finally(() => setLoading(false));
@@ -84,7 +84,7 @@ const Shows = () => {
 
   const handleArchive = async (id: string) => {
     try {
-      await apiFetch(`/api/shows/${id}/archive`, { method: "PATCH" });
+      await api.patch(`/api/shows/${id}/archive`);
       toast.success("Show archived");
       fetchShows();
     } catch (err: any) {

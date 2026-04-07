@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { toast } from "sonner";
 import {
   Settings, Upload, Plug, Shield, ListChecks, ScrollText, Loader2,
@@ -87,7 +87,7 @@ const SettingsPage = () => {
 
   const fetchSettings = () => {
     setLoading(true);
-    apiFetch<AdminSettings>("/api/admin/settings")
+    api.get<AdminSettings>("/api/admin/settings")
       .then((d) => {
         setData(d);
         setGeneral(d.general);
@@ -106,7 +106,7 @@ const SettingsPage = () => {
   const save = async (section: string, payload: unknown) => {
     setSaving(true);
     try {
-      await apiFetch("/api/admin/settings", { method: "PATCH", body: JSON.stringify({ section, data: payload }) });
+      await api.patch("/api/admin/settings", { section, data: payload });
       toast.success("Settings saved");
       fetchSettings();
     } catch { toast.error("Save failed"); }
@@ -117,7 +117,7 @@ const SettingsPage = () => {
   const testSnapchat = async () => {
     setTesting(true);
     try {
-      await apiFetch("/api/admin/settings/test-snapchat", { method: "POST", body: JSON.stringify({ token: integrations.snapchatApiToken }) });
+      await api.post("/api/admin/settings/test-snapchat", { token: integrations.snapchatApiToken });
       toast.success("Snapchat connection OK");
     } catch { toast.error("Snapchat connection failed"); }
     finally { setTesting(false); }

@@ -4,7 +4,7 @@ import {
   PointerSensor, useSensor, useSensors, closestCorners,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { KANBAN_STAGES, type Task, type Stage } from "@/lib/types";
 import KanbanColumn from "@/components/KanbanColumn";
 import KanbanCard from "@/components/KanbanCard";
@@ -43,7 +43,7 @@ const Tasks = () => {
 
   const fetchTasks = useCallback(() => {
     setLoading(true); setError(null);
-    apiFetch<Task[]>("/api/tasks")
+    api.get<Task[]>("/api/tasks")
       .then(setTasks)
       .catch((e) => setError(e.message || "Failed to load tasks"))
       .finally(() => setLoading(false));
@@ -111,7 +111,7 @@ const Tasks = () => {
         setTasks((prev) => { const others = prev.filter((t) => t.stage !== task.stage); return [...others, ...reordered]; });
       }
     }
-    try { await apiFetch(`/api/tasks/${activeId}/stage`, { method: "PATCH", body: JSON.stringify({ stage: task.stage }) }); }
+    try { await api.patch(`/api/tasks/${activeId}/stage`, { stage: task.stage }); }
     catch { toast.error("Failed to update task stage"); fetchTasks(); }
   };
 

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiFetch, API_BASE } from "@/lib/api";
+import { api, API_BASE } from "@/lib/api";
 import { getToken } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -67,7 +67,7 @@ const ShowAnalyticsPage = () => {
 
   const fetchData = useCallback(() => {
     setLoading(true);
-    apiFetch<ShowAnalytics[]>(`/api/analytics/shows?range=${range}`)
+    api.get<ShowAnalytics[]>(`/api/analytics/shows?range=${range}`)
       .then(setShows)
       .catch(() => toast.error("Failed to load show analytics"))
       .finally(() => setLoading(false));

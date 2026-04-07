@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getRole } from "@/lib/auth";
 import { toast } from "sonner";
 import { differenceInMinutes, differenceInHours, isPast, parseISO } from "date-fns";
@@ -86,7 +86,7 @@ const EpisodeDetail = () => {
 
   const fetchData = () => {
     setLoading(true);
-    apiFetch<EpisodeData>(`/api/episodes/${id}`)
+    api.get<EpisodeData>(`/api/episodes/${id}`)
       .then(setData)
       .catch(() => toast.error("Failed to load episode"))
       .finally(() => setLoading(false));
@@ -95,7 +95,7 @@ const EpisodeDetail = () => {
   useEffect(() => { fetchData(); }, [id]);
   useEffect(() => {
     if (data && isLeadOrAdmin) {
-      apiFetch<StaffOption[]>(`/api/shows/${data.showId}/staff`).then(setStaffOptions).catch(() => {});
+      api.get<StaffOption[]>(`/api/shows/${data.showId}/staff`).then(setStaffOptions).catch(() => {});
     }
   }, [data?.showId]);
 
@@ -116,7 +116,7 @@ const EpisodeDetail = () => {
     if (!noteText.trim()) return;
     setNoteSending(true);
     try {
-      await apiFetch(`/api/episodes/${id}/notes`, { method: "POST", body: JSON.stringify({ text: noteText }) });
+      await api.post(`/api/episodes/${id}/notes`, { text: noteText });
       setNoteText(""); fetchData();
     } catch { toast.error("Failed to send note"); }
     finally { setNoteSending(false); }
@@ -125,7 +125,7 @@ const EpisodeDetail = () => {
   const markComplete = async (stage: string) => {
     setCompleting(stage);
     try {
-      await apiFetch(`/api/episodes/${id}/handoff`, { method: "POST", body: JSON.stringify({ stage, notes: completeNote }) });
+      await api.post(`/api/episodes/${id}/handoff`, { stage, notes: completeNote });
       setCompleteNote(""); toast.success(`${stage} marked complete`); fetchData();
     } catch { toast.error("Failed to complete stage"); }
     finally { setCompleting(null); }
@@ -134,7 +134,7 @@ const EpisodeDetail = () => {
   const submitQa = async () => {
     setQaSubmitting(true);
     try {
-      await apiFetch(`/api/episodes/${id}/qa`, { method: "POST", body: JSON.stringify({ scores: qaScores, pass: qaPass, notes: qaNotes }) });
+      await api.post(`/api/episodes/${id}/qa`, { scores: qaScores, pass: qaPass, notes: qaNotes });
       toast.success("QA review submitted"); fetchData();
     } catch { toast.error("QA submit failed"); }
     finally { setQaSubmitting(false); }
@@ -143,7 +143,7 @@ const EpisodeDetail = () => {
   const checkPcloud = async () => {
     setPcloudChecking(true);
     try {
-      const res = await apiFetch<{ found: boolean }>(`/api/episodes/${id}/pcloud-check`);
+      const res = await api.post<{ found: boolean }>(`/api/episodes/${id}/pcloud-check`);
       setPcloudFound(res.found);
     } catch { toast.error("pCloud check failed"); }
     finally { setPcloudChecking(false); }
@@ -152,7 +152,7 @@ const EpisodeDetail = () => {
   const verifyPcloud = async () => {
     setPcloudVerifying(true);
     try {
-      await apiFetch(`/api/episodes/${id}/pcloud-verify`, { method: "POST" });
+      await api.get(`/api/episodes/${id}/pcloud-verify`);
       toast.success("Marked as verified"); fetchData();
     } catch { toast.error("Verification failed"); }
     finally { setPcloudVerifying(false); }
@@ -160,7 +160,7 @@ const EpisodeDetail = () => {
 
   const reassign = async (roleKey: string, employeeId: string) => {
     try {
-      await apiFetch(`/api/episodes/${id}/assign`, { method: "PATCH", body: JSON.stringify({ role: roleKey, employeeId }) });
+      await api.patch(`/api/episodes/${id}/assign`, { role: roleKey, employeeId });
       toast.success("Reassigned"); fetchData();
     } catch { toast.error("Reassignment failed"); }
   };

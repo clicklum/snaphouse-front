@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -70,7 +70,7 @@ const IssueFineModal = ({ open, onOpenChange, employeeId, employeeName, onCreate
   /* fetch reasons */
   useEffect(() => {
     if (!open) return;
-    apiFetch<FineReason[]>("/api/admin/fine-reasons")
+    api.get<FineReason[]>("/api/admin/fine-reasons")
       .then(setReasons)
       .catch(() => setReasons(FALLBACK_REASONS));
   }, [open]);

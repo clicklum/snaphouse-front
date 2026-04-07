@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiFetch, API_BASE } from "@/lib/api";
+import { api, API_BASE } from "@/lib/api";
 import { getToken } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -214,7 +214,7 @@ const TeamAnalytics = () => {
   const fetchData = useCallback(() => {
     setLoading(true);
     const roleParam = role === "all" ? "" : `&role=${role}`;
-    apiFetch<{
+    api.get<{
       editors: EditorRow[];
       researchers: ResearcherRow[];
       teamLeads: LeadRow[];

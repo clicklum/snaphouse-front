@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getRole } from "@/lib/auth";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -110,17 +110,17 @@ const ShowDetail = () => {
   const fetchAll = () => {
     setLoading(true);
     Promise.all([
-      apiFetch<Show>(`/api/shows/${id}`),
-      apiFetch<ShowStats>(`/api/shows/${id}/stats`),
-      apiFetch<Episode[]>(`/api/shows/${id}/episodes`),
-      apiFetch<TeamMember[]>(`/api/shows/${id}/team`),
+      api.get<Show>(`/api/shows/${id}`),
+      api.get<ShowStats>(`/api/shows/${id}/stats`),
+      api.get<Episode[]>(`/api/shows/${id}/episodes`),
+      api.get<TeamMember[]>(`/api/shows/${id}/team`),
     ]).then(([s, st, ep, tm]) => {
       setShow(s); setStats(st); setEpisodes(ep); setTeam(tm); setSettingsForm(s);
     }).catch(() => toast.error("Failed to load show")).finally(() => setLoading(false));
   };
 
   const fetchInsights = () => {
-    apiFetch<SnapchatInsights>(`/api/shows/${id}/snapchat?range=${insightRange}`).then(setInsights).catch(() => toast.error("Failed to load insights"));
+    api.get<SnapchatInsights>(`/api/shows/${id}/snapchat?range=${insightRange}`).then(setInsights).catch(() => toast.error("Failed to load insights"));
   };
 
   useEffect(() => { fetchAll(); }, [id]);
@@ -128,20 +128,20 @@ const ShowDetail = () => {
 
   /* staff options */
   useEffect(() => {
-    apiFetch<StaffOption[]>(`/api/shows/${id}/staff?role=researcher`).then(setResearchers).catch(() => {});
-    apiFetch<StaffOption[]>(`/api/shows/${id}/staff?role=editor`).then(setEditors).catch(() => {});
+    api.get<StaffOption[]>(`/api/shows/${id}/staff?role=researcher`).then(setResearchers).catch(() => {});
+    api.get<StaffOption[]>(`/api/shows/${id}/staff?role=editor`).then(setEditors).catch(() => {});
   }, [id]);
 
   const handleArchive = async () => {
     setArchiving(true);
-    try { await apiFetch(`/api/shows/${id}/archive`, { method: "PATCH" }); toast.success("Show archived"); navigate("/shows", { replace: true }); }
+    try { await api.patch(`/api/shows/${id}/archive`); toast.success("Show archived"); navigate("/shows", { replace: true }); }
     catch { toast.error("Failed to archive"); }
     finally { setArchiving(false); setArchiveOpen(false); }
   };
 
   const handleNewEpisode = async () => {
     setEpSaving(true);
-    try { await apiFetch(`/api/shows/${id}/episodes`, { method: "POST", body: JSON.stringify(epForm) }); toast.success("Episode created"); setEpDrawer(false); fetchAll(); }
+    try { await api.post(`/api/shows/${id}/episodes`, epForm); toast.success("Episode created"); setEpDrawer(false); fetchAll(); }
     catch { toast.error("Failed to create episode"); }
     finally { setEpSaving(false); }
   };
@@ -149,13 +149,13 @@ const ShowDetail = () => {
   const handleAssignSearch = (q: string) => {
     setAssignSearch(q);
     if (q.length < 2) { setAssignResults([]); return; }
-    apiFetch<StaffOption[]>(`/api/employees/search?q=${encodeURIComponent(q)}`).then(setAssignResults).catch(() => {});
+    api.post<StaffOption[]>(`/api/employees/search?q=${encodeURIComponent(q)}`).then(setAssignResults).catch(() => {});
   };
 
   const handleAssign = async () => {
     if (!assignSelected) return;
     setAssignSaving(true);
-    try { await apiFetch(`/api/shows/${id}/team`, { method: "POST", body: JSON.stringify({ employeeId: assignSelected, role: assignRole }) }); toast.success("Member assigned"); setAssignOpen(false); fetchAll(); }
+    try { await apiFetch(`/api/shows/${id}/team`, { employeeId: assignSelected, role: assignRole }); toast.success("Member assigned"); setAssignOpen(false); fetchAll(); }
     catch { toast.error("Failed to assign"); }
     finally { setAssignSaving(false); }
   };
@@ -163,7 +163,7 @@ const ShowDetail = () => {
   const handleSettingsSave = async () => {
     if (!settingsForm) return;
     setSettingsSaving(true);
-    try { await apiFetch(`/api/shows/${id}`, { method: "PATCH", body: JSON.stringify(settingsForm) }); toast.success("Settings saved"); fetchAll(); }
+    try { await api.patch(`/api/shows/${id}`, settingsForm); toast.success("Settings saved"); fetchAll(); }
     catch { toast.error("Save failed"); }
     finally { setSettingsSaving(false); }
   };

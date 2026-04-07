@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { format, startOfMonth, addMonths, subMonths } from "date-fns";
-import { apiFetch, API_BASE } from "@/lib/api";
+import { api, API_BASE } from "@/lib/api";
 import { getRole, getToken } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -233,12 +233,12 @@ const Attendance = () => {
   const fetchData = useCallback(() => {
     setLoading(true);
     const promises: Promise<void>[] = [
-      apiFetch<AttendanceData>(`/api/attendance?month=${monthStr}`).then(setData),
-      apiFetch<SummaryData>(`/api/attendance/summary?month=${monthStr}`).then(setSummary).catch(() => {}),
+      api.get<AttendanceData>(`/api/attendance?month=${monthStr}`).then(setData),
+      api.get<SummaryData>(`/api/attendance/summary?month=${monthStr}`).then(setSummary).catch(() => {}),
     ];
     if (isAdmin) {
       promises.push(
-        apiFetch<{ lateGraceMinutes: number }>("/api/admin/settings")
+        api.get<{ lateGraceMinutes: number }>("/api/admin/settings")
           .then(s => { setGrace(s.lateGraceMinutes); setGraceDraft(String(s.lateGraceMinutes)); })
           .catch(() => {})
       );
@@ -252,7 +252,7 @@ const Attendance = () => {
 
   const handleLeaveAction = async (leaveId: string, action: "approved" | "rejected") => {
     try {
-      await apiFetch(`/api/leaves/${leaveId}`, { method: "PATCH", body: JSON.stringify({ status: action }) });
+      await api.patch(`/api/leaves/${leaveId}`, { status: action });
       toast.success(`Leave ${action}`);
       fetchData();
     } catch { toast.error(`Failed to ${action} leave`); }
@@ -263,7 +263,7 @@ const Attendance = () => {
     if (isNaN(val) || val < 0) return;
     setGraceSaving(true);
     try {
-      await apiFetch("/api/admin/settings", { method: "PATCH", body: JSON.stringify({ lateGraceMinutes: val }) });
+      await api.patch("/api/admin/settings", { lateGraceMinutes: val });
       setGrace(val);
       setGraceEditing(false);
       toast.success("Grace period updated");

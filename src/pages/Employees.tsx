@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getRole } from "@/lib/auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -52,7 +52,7 @@ const Employees = () => {
 
   const fetchEmployees = () => {
     setLoading(true); setError(null);
-    apiFetch<Employee[]>("/api/employees")
+    api.get<Employee[]>("/api/employees")
       .then(setEmployees)
       .catch((e) => setError(e.message || "Failed to load employees"))
       .finally(() => setLoading(false));
@@ -71,7 +71,7 @@ const Employees = () => {
 
   const openFineModal = (emp: Employee) => { setFineTarget({ id: emp.id, name: emp.name }); setFineOpen(true); };
   const handleDeactivate = async (id: string) => {
-    try { await apiFetch(`/api/employees/${id}/deactivate`, { method: "PATCH" }); toast.success("Employee deactivated"); fetchEmployees(); }
+    try { await api.patch(`/api/employees/${id}/deactivate`); toast.success("Employee deactivated"); fetchEmployees(); }
     catch (err: any) { toast.error(err.message || "Failed to deactivate"); }
   };
 
