@@ -227,8 +227,43 @@ const Attendance = () => {
   const fetchData = useCallback(() => {
     setLoading(true);
     const promises: Promise<void>[] = [
-      api.get<AttendanceData>(`/attendance?month=${monthStr}`).then(setData),
-      api.get<SummaryData>(`/attendance/summary?month=${monthStr}`).then(setSummary).catch(() => {}),
+      api.get<AttendanceData | unknown[]>(`/attendance?month=${monthStr}`).then((raw) => {
+        // Backend may return a flat array — normalize to expected shape
+        if (Array.isArray(raw)) {
+          const records: AttendanceRecord[] = raw.map((r: any) => ({
+            id: r.id,
+            employeeId: r.employee_id,
+            employeeName: r.name || "Unknown",
+            status: r.status || "absent",
+            clockIn: r.clock_in || null,
+            clockOut: r.clock_out || null,
+            lateMinutes: r.late_minutes || 0,
+            monthlyPresent: 0,
+            monthlyTotal: 0,
+          }));
+          const presentToday = records.filter(r => r.status === "present").length;
+          const absentToday = records.filter(r => r.status === "absent").length;
+          const lateToday = records.filter(r => r.status === "late").length;
+          setData({
+            stats: { presentToday, absentToday, lateToday, pendingLeaves: 0 },
+            records,
+            leaveRequests: [],
+          });
+        } else {
+          setData(raw as AttendanceData);
+        }
+      }),
+      api.get<SummaryData | any>(`/attendance/summary?month=${monthStr}`).then((raw) => {
+        // Normalize snake_case from backend
+        if (raw && typeof raw === "object") {
+          setSummary({
+            workingDays: raw.workingDays ?? raw.working_days ?? 0,
+            attendanceRate: raw.attendanceRate ?? raw.attendance_rate ?? 0,
+            mostAbsent: raw.mostAbsent ?? raw.most_absent ?? null,
+            mostLate: raw.mostLate ?? raw.most_late ?? null,
+          });
+        }
+      }).catch(() => {}),
     ];
     if (isAdmin) {
       promises.push(
