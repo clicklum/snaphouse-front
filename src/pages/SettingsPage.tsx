@@ -125,7 +125,7 @@ const SettingsPage = () => {
 
   /* ---------- pCloud ---------- */
   const connectPcloud = () => {
-    window.open(`${import.meta.env.VITE_API_BASE || "https://api.dailyvertex.io"}/api/admin/pcloud/oauth`, "_blank");
+    window.open(`${import.meta.env.VITE_API_BASE || "https://api.dailyvertex.io"}/admin/pcloud/oauth`, "_blank");
   };
 
   /* ---------- Roles toggle ---------- */

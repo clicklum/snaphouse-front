@@ -207,7 +207,7 @@ const Leaves = () => {
   const handleAction = async (id: string, action: "approved" | "rejected") => {
     setActionId(id);
     try {
-      await api.patch(`/api/leaves/${id}`, { status: action });
+      await api.patch(`/leaves/${id}`, { status: action });
       toast.success(`Leave ${action}`);
       fetchData();
     } catch { toast.error(`Failed to ${action === "approved" ? "approve" : "reject"} leave`); }

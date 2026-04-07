@@ -139,7 +139,7 @@ const GlobalSearch = ({ open, onOpenChange }: Props) => {
     if (q.trim().length < 2) { setResults(null); setLoading(false); return; }
     setLoading(true);
     try {
-      const data = await api.get<SearchResults>(`/api/search?q=${encodeURIComponent(q)}`);
+      const data = await api.get<SearchResults>(`/search?q=${encodeURIComponent(q)}`);
       setResults(data);
       setActiveIndex(-1);
     } catch {

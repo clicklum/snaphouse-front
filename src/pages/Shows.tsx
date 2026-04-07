@@ -84,7 +84,7 @@ const Shows = () => {
 
   const handleArchive = async (id: string) => {
     try {
-      await api.patch(`/api/shows/${id}/archive`);
+      await api.patch(`/shows/${id}/archive`);
       toast.success("Show archived");
       fetchShows();
     } catch (err: any) {

@@ -54,7 +54,7 @@ const Payroll = () => {
 
   const fetchData = () => {
     setLoading(true);
-    api.get<PayrollSummary>(`/api/payroll?month=${monthStr}`)
+    api.get<PayrollSummary>(`/payroll?month=${monthStr}`)
       .then(setData)
       .catch(() => toast.error("Failed to load payroll"))
       .finally(() => setLoading(false));

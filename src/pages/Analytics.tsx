@@ -104,7 +104,7 @@ const Analytics = () => {
   const fetchData = useCallback(() => {
     setLoading(true);
     setError(null);
-    api.get<AnalyticsData>(`/api/analytics?range=${range}&show=${showFilter}`)
+    api.get<AnalyticsData>(`/analytics?range=${range}&show=${showFilter}`)
       .then(setData)
       .catch((e) => setError(e.message || "Failed to load analytics"))
       .finally(() => setLoading(false));
@@ -118,7 +118,7 @@ const Analytics = () => {
     setExporting(true);
     try {
       const res = await fetch(
-        `https://api.dailyvertex.io/api/analytics/export?range=${range}&show=${showFilter}`,
+        `https://api.dailyvertex.io/analytics/export?range=${range}&show=${showFilter}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("snaphouse_jwt") || ""}`,

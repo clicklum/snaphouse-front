@@ -85,7 +85,7 @@ const OverridePopover = ({ record, onDone }: { record: AttendanceRecord; onDone:
   const submit = async () => {
     setSaving(true);
     try {
-      await api.patch(`/api/attendance/${record.id}`, { status, note: note.trim() || undefined });
+      await api.patch(`/attendance/${record.id}`, { status, note: note.trim() || undefined });
       toast.success("Status updated");
       setOpen(false);
       onDone();
@@ -227,8 +227,8 @@ const Attendance = () => {
   const fetchData = useCallback(() => {
     setLoading(true);
     const promises: Promise<void>[] = [
-      api.get<AttendanceData>(`/api/attendance?month=${monthStr}`).then(setData),
-      api.get<SummaryData>(`/api/attendance/summary?month=${monthStr}`).then(setSummary).catch(() => {}),
+      api.get<AttendanceData>(`/attendance?month=${monthStr}`).then(setData),
+      api.get<SummaryData>(`/attendance/summary?month=${monthStr}`).then(setSummary).catch(() => {}),
     ];
     if (isAdmin) {
       promises.push(
@@ -246,7 +246,7 @@ const Attendance = () => {
 
   const handleLeaveAction = async (leaveId: string, action: "approved" | "rejected") => {
     try {
-      await api.patch(`/api/leaves/${leaveId}`, { status: action });
+      await api.patch(`/leaves/${leaveId}`, { status: action });
       toast.success(`Leave ${action}`);
       fetchData();
     } catch { toast.error(`Failed to ${action} leave`); }
@@ -267,7 +267,7 @@ const Attendance = () => {
 
   const exportCSV = () => {
     const token = getToken();
-    const url = `${API_BASE}/api/attendance/export?month=${monthStr}`;
+    const url = `${API_BASE}/attendance/export?month=${monthStr}`;
     const a = document.createElement("a");
     a.href = `${url}&token=${token}`;
     a.download = `attendance-${monthStr}.csv`;

@@ -111,7 +111,7 @@ const Tasks = () => {
         setTasks((prev) => { const others = prev.filter((t) => t.stage !== task.stage); return [...others, ...reordered]; });
       }
     }
-    try { await api.patch(`/api/tasks/${activeId}/stage`, { stage: task.stage }); }
+    try { await api.patch(`/tasks/${activeId}/stage`, { stage: task.stage }); }
     catch { toast.error("Failed to update task stage"); fetchTasks(); }
   };
 
