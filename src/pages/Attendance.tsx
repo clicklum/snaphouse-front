@@ -309,11 +309,11 @@ const Attendance = () => {
     a.click();
   };
 
-  const stats = data ? [
-    { label: "Present Today", value: data.stats.presentToday, icon: UserCheck, color: "text-emerald-400" },
-    { label: "Absent Today", value: data.stats.absentToday, icon: UserX, color: "text-destructive" },
-    { label: "Late Today", value: data.stats.lateToday, icon: Clock, color: "text-amber-400" },
-    { label: "Pending Leaves", value: data.stats.pendingLeaves, icon: FileText, color: "text-primary" },
+  const stats = data?.stats ? [
+    { label: "Present Today", value: data.stats.presentToday ?? 0, icon: UserCheck, color: "text-emerald-400" },
+    { label: "Absent Today", value: data.stats.absentToday ?? 0, icon: UserX, color: "text-destructive" },
+    { label: "Late Today", value: data.stats.lateToday ?? 0, icon: Clock, color: "text-amber-400" },
+    { label: "Pending Leaves", value: data.stats.pendingLeaves ?? 0, icon: FileText, color: "text-primary" },
   ] : null;
 
   const pendingLeaves = data?.leaveRequests.filter(l => l.status === "pending") || [];
