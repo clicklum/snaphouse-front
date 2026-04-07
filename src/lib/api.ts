@@ -31,8 +31,9 @@ async function attemptRefresh(): Promise<boolean> {
     });
     if (!res.ok) return false;
     const data = await res.json();
-    if (data.token) {
-      setToken(data.token);
+    const token = data.accessToken || data.token;
+    if (token) {
+      setToken(token);
       return true;
     }
     return false;
