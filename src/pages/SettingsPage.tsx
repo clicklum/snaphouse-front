@@ -68,6 +68,7 @@ const SectionSkeleton = () => (
 const SettingsPage = () => {
   const [data, setData] = useState<AdminSettings | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   /* local editable state */
