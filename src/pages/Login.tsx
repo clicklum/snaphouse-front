@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { setToken, setRole } from "@/lib/auth";
+import { setToken, setRole, setRefreshToken } from "@/lib/auth";
 import { API_BASE } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
