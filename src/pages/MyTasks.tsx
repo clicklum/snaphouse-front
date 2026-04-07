@@ -62,7 +62,7 @@ const MyTasks = () => {
   const fetchTasks = useCallback(() => {
     setLoading(true);
     setError(null);
-    api.get<MyTask[]>("/api/tasks/my")
+    api.get<MyTask[]>("/tasks/my")
       .then(setTasks)
       .catch((e) => setError(e.message || "Failed to load your tasks"))
       .finally(() => setLoading(false));

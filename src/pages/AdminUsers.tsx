@@ -121,8 +121,8 @@ const AdminUsers = () => {
     setLoading(true);
     try {
       const [mgmt, slack] = await Promise.all([
-        api.get<ManagementUser[]>("/api/admin/users?type=management"),
-        api.get<SlackEmployee[]>("/api/admin/users?type=slack"),
+        api.get<ManagementUser[]>("/admin/users?type=management"),
+        api.get<SlackEmployee[]>("/admin/users?type=slack"),
       ]);
       setMgmtUsers(mgmt);
       setSlackUsers(slack);
@@ -149,7 +149,7 @@ const AdminUsers = () => {
     if (err) { setEmailError(err); return; }
     setInviting(true);
     try {
-      await api.post("/api/admin/users/invite", { email: inviteEmail, role: inviteRole });
+      await api.post("/admin/users/invite", { email: inviteEmail, role: inviteRole });
       toast.success("Invite sent — user will receive a set-password email");
       setInviteOpen(false);
       setInviteEmail("");

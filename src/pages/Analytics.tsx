@@ -92,7 +92,7 @@ const Analytics = () => {
   const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
-    api.get<ShowOption[]>("/api/shows")
+    api.get<ShowOption[]>("/shows")
       .then((res) => {
         if (Array.isArray(res)) {
           setShows(res.map((s: any) => ({ id: s.id, name: s.name })));

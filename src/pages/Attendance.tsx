@@ -126,7 +126,7 @@ const BulkAbsentModal = ({ open, onOpenChange, onDone }: { open: boolean; onOpen
   useEffect(() => {
     if (!open) return;
     setLoading(true);
-    api.get<EmployeeOption[]>("/api/employees?fields=id,name")
+    api.get<EmployeeOption[]>("/employees?fields=id,name")
       .then(setEmployees)
       .catch(() => toast.error("Failed to load employees"))
       .finally(() => setLoading(false));
@@ -144,7 +144,7 @@ const BulkAbsentModal = ({ open, onOpenChange, onDone }: { open: boolean; onOpen
     if (!date || selected.size === 0) return;
     setSaving(true);
     try {
-      await api.post("/api/attendance/bulk", { date: format(date, "yyyy-MM-dd"), employeeIds: Array.from(selected), status: "absent" });
+      await api.post("/attendance/bulk", { date: format(date, "yyyy-MM-dd"), employeeIds: Array.from(selected), status: "absent" });
       toast.success(`Marked ${selected.size} employee${selected.size > 1 ? "s" : ""} absent`);
       onOpenChange(false);
       setSelected(new Set());
@@ -232,7 +232,7 @@ const Attendance = () => {
     ];
     if (isAdmin) {
       promises.push(
-        api.get<{ lateGraceMinutes: number }>("/api/admin/settings")
+        api.get<{ lateGraceMinutes: number }>("/admin/settings")
           .then(s => { setGrace(s.lateGraceMinutes); setGraceDraft(String(s.lateGraceMinutes)); })
           .catch(() => {})
       );
@@ -257,7 +257,7 @@ const Attendance = () => {
     if (isNaN(val) || val < 0) return;
     setGraceSaving(true);
     try {
-      await api.patch("/api/admin/settings", { lateGraceMinutes: val });
+      await api.patch("/admin/settings", { lateGraceMinutes: val });
       setGrace(val);
       setGraceEditing(false);
       toast.success("Grace period updated");

@@ -52,7 +52,7 @@ const Employees = () => {
 
   const fetchEmployees = () => {
     setLoading(true); setError(null);
-    api.get<Employee[]>("/api/employees")
+    api.get<Employee[]>("/employees")
       .then(setEmployees)
       .catch((e) => setError(e.message || "Failed to load employees"))
       .finally(() => setLoading(false));

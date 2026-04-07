@@ -70,7 +70,7 @@ const IssueFineModal = ({ open, onOpenChange, employeeId, employeeName, onCreate
   /* fetch reasons */
   useEffect(() => {
     if (!open) return;
-    api.get<FineReason[]>("/api/admin/fine-reasons")
+    api.get<FineReason[]>("/admin/fine-reasons")
       .then(setReasons)
       .catch(() => setReasons(FALLBACK_REASONS));
   }, [open]);
@@ -79,7 +79,7 @@ const IssueFineModal = ({ open, onOpenChange, employeeId, employeeName, onCreate
   useEffect(() => {
     if (!open || !needsEmployeeSearch) return;
     setEmpLoading(true);
-    api.get<EmployeeOption[]>("/api/employees?fields=id,name,email")
+    api.get<EmployeeOption[]>("/employees?fields=id,name,email")
       .then(setEmployees)
       .catch(() => toast.error("Failed to load employees"))
       .finally(() => setEmpLoading(false));
@@ -120,7 +120,7 @@ const IssueFineModal = ({ open, onOpenChange, employeeId, employeeName, onCreate
     if (!isValid) return;
     setSaving(true);
     try {
-      await api.post("/api/fines", {
+      await api.post("/fines", {
           employeeId: selectedEmployee,
           reason: finalReason,
           reasonId,

@@ -100,10 +100,10 @@ const NewShowSheet = ({ open, onOpenChange, onCreated }: NewShowSheetProps) => {
   /* ── Fetch staff on mount ── */
   useEffect(() => {
     if (!open) return;
-    api.get<StaffOption[]>("/api/employees?role=team_lead").then(setLeads).catch(() => {});
-    api.get<StaffOption[]>("/api/employees?role=researcher").then(setAllResearchers).catch(() => {});
-    api.get<StaffOption[]>("/api/employees?role=editor").then(setAllEditors).catch(() => {});
-    api.get<StaffOption[]>("/api/employees?role=qa").then(setAllQa).catch(() => {});
+    api.get<StaffOption[]>("/employees?role=team_lead").then(setLeads).catch(() => {});
+    api.get<StaffOption[]>("/employees?role=researcher").then(setAllResearchers).catch(() => {});
+    api.get<StaffOption[]>("/employees?role=editor").then(setAllEditors).catch(() => {});
+    api.get<StaffOption[]>("/employees?role=qa").then(setAllQa).catch(() => {});
   }, [open]);
 
   /* ── Filtered lists ── */
@@ -163,7 +163,7 @@ const NewShowSheet = ({ open, onOpenChange, onCreated }: NewShowSheetProps) => {
   const handleSubmit = async () => {
     setSaving(true);
     try {
-      const res = await api.post<{ id: string }>("/api/shows", {
+      const res = await api.post<{ id: string }>("/shows", {
           name, snapchatProfileId: snapId, category, language, cadence,
           pcloudFolderPath: pcloudPath, targetViews, startDate: startDate?.toISOString(), description,
           primaryLead, backupLead: backupLead || undefined,

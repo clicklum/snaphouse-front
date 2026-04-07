@@ -94,7 +94,7 @@ const AddEmployeeSheet = ({ open, onOpenChange, onCreated }: AddEmployeeSheetPro
     }
     setSaving(true);
     try {
-      await api.post("/api/employees", {
+      await api.post("/employees", {
           ...result.data,
           joinDate: result.data.joinDate.toISOString().slice(0, 10),
         });

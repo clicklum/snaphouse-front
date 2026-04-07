@@ -43,9 +43,9 @@ const Dashboard = () => {
 
   const fetchAll = () => {
     setError(null);
-    api.get<SummaryData>("/api/analytics/summary").then(setSummary).catch((e) => setError(e.message || "Failed to load dashboard")).finally(() => setLoadingSummary(false));
-    api.get<Episode[]>("/api/episodes/today").then(setEpisodes).catch(() => {}).finally(() => setLoadingEpisodes(false));
-    api.get<WeeklyView[]>("/api/analytics/weekly").then(setWeekly).catch(() => {}).finally(() => setLoadingWeekly(false));
+    api.get<SummaryData>("/analytics/summary").then(setSummary).catch((e) => setError(e.message || "Failed to load dashboard")).finally(() => setLoadingSummary(false));
+    api.get<Episode[]>("/episodes/today").then(setEpisodes).catch(() => {}).finally(() => setLoadingEpisodes(false));
+    api.get<WeeklyView[]>("/analytics/weekly").then(setWeekly).catch(() => {}).finally(() => setLoadingWeekly(false));
   };
 
   useEffect(() => { fetchAll(); }, []);

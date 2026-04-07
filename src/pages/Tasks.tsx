@@ -43,7 +43,7 @@ const Tasks = () => {
 
   const fetchTasks = useCallback(() => {
     setLoading(true); setError(null);
-    api.get<Task[]>("/api/tasks")
+    api.get<Task[]>("/tasks")
       .then(setTasks)
       .catch((e) => setError(e.message || "Failed to load tasks"))
       .finally(() => setLoading(false));

@@ -65,7 +65,7 @@ const Payroll = () => {
   const runPayroll = async () => {
     setRunning(true);
     try {
-      await api.post("/api/payroll/run", { month: monthStr });
+      await api.post("/payroll/run", { month: monthStr });
       toast.success("Payroll processed");
       fetchData();
     } catch { toast.error("Failed to run payroll"); }

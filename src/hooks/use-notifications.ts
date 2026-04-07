@@ -71,7 +71,7 @@ export function useNotifications() {
   /* Poll for unread count only */
   const pollCount = useCallback(async () => {
     try {
-      const res = await api.get<{ count: number }>("/api/notifications?countOnly=true");
+      const res = await api.get<{ count: number }>("/notifications?countOnly=true");
       setUnreadCount(res.count);
     } catch {
       // silent
@@ -102,7 +102,7 @@ export function useNotifications() {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     setUnreadCount(0);
     try {
-      await api.post("/api/notifications/read-all");
+      await api.post("/notifications/read-all");
     } catch { /* silent */ }
   }, []);
 

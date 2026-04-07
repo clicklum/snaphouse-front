@@ -64,7 +64,7 @@ const Shows = () => {
   const fetchShows = () => {
     setLoading(true);
     setError(null);
-    api.get<Show[]>("/api/shows")
+    api.get<Show[]>("/shows")
       .then(setShows)
       .catch((e) => setError(e.message || "Failed to load shows"))
       .finally(() => setLoading(false));
