@@ -173,6 +173,21 @@ const SettingsPage = () => {
     </div>
   );
 
+  if (error) return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="font-display text-2xl font-bold flex items-center gap-2"><Settings className="h-6 w-6" />Admin Settings</h1>
+        <p className="text-sm text-muted-foreground">Manage company configuration, integrations, and permissions.</p>
+      </div>
+      <Card className="border-border">
+        <CardContent className="flex flex-col items-center justify-center py-16 gap-4">
+          <p className="text-muted-foreground text-sm">This feature requires the <code className="text-primary">/admin/settings</code> backend endpoint to be implemented.</p>
+          <Button variant="outline" onClick={fetchSettings}>Try Again</Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
   return (
     <div className="space-y-6">
       <div>
