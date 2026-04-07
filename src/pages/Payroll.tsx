@@ -147,7 +147,7 @@ const Payroll = () => {
       </div>
 
       {/* Table */}
-      {loading ? <TableSkeleton /> : (
+      {error ? <PageError message={error} onRetry={fetchData} /> : loading ? <TableSkeleton /> : (
         <Card>
           <Table>
             <TableHeader>
