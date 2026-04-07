@@ -94,13 +94,10 @@ const AddEmployeeSheet = ({ open, onOpenChange, onCreated }: AddEmployeeSheetPro
     }
     setSaving(true);
     try {
-      await apiFetch("/api/employees", {
-        method: "POST",
-        body: JSON.stringify({
+      await api.post("/api/employees", {
           ...result.data,
           joinDate: result.data.joinDate.toISOString().slice(0, 10),
-        }),
-      });
+        });
       toast.success("Employee added");
       onOpenChange(false);
       setForm({ ...emptyForm });

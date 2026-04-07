@@ -149,10 +149,7 @@ const AdminUsers = () => {
     if (err) { setEmailError(err); return; }
     setInviting(true);
     try {
-      await apiFetch("/api/admin/users/invite", {
-        method: "POST",
-        body: JSON.stringify({ email: inviteEmail, role: inviteRole }),
-      });
+      await api.post("/api/admin/users/invite", { email: inviteEmail, role: inviteRole });
       toast.success("Invite sent — user will receive a set-password email");
       setInviteOpen(false);
       setInviteEmail("");
@@ -169,10 +166,7 @@ const AdminUsers = () => {
     if (!editRoleTarget || !newRole) return;
     setSavingRole(true);
     try {
-      await apiFetch(`/api/admin/users/${editRoleTarget.id}`, {
-        method: "PATCH",
-        body: JSON.stringify({ role: newRole }),
-      });
+      await api.patch(`/api/admin/users/${editRoleTarget.id}`, { role: newRole });
       toast.success(`Role updated to ${formatRole(newRole)}${editRoleTarget.type === "slack" ? " — Slack DM sent" : ""}`);
       setEditRoleTarget(null);
       fetchData();

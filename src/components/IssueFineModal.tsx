@@ -79,7 +79,7 @@ const IssueFineModal = ({ open, onOpenChange, employeeId, employeeName, onCreate
   useEffect(() => {
     if (!open || !needsEmployeeSearch) return;
     setEmpLoading(true);
-    apiFetch<EmployeeOption[]>("/api/employees?fields=id,name,email")
+    api.get<EmployeeOption[]>("/api/employees?fields=id,name,email")
       .then(setEmployees)
       .catch(() => toast.error("Failed to load employees"))
       .finally(() => setEmpLoading(false));
@@ -120,9 +120,7 @@ const IssueFineModal = ({ open, onOpenChange, employeeId, employeeName, onCreate
     if (!isValid) return;
     setSaving(true);
     try {
-      await apiFetch("/api/fines", {
-        method: "POST",
-        body: JSON.stringify({
+      await api.post("/api/fines", {
           employeeId: selectedEmployee,
           reason: finalReason,
           reasonId,
@@ -130,8 +128,7 @@ const IssueFineModal = ({ open, onOpenChange, employeeId, employeeName, onCreate
           description: description.trim() || undefined,
           applyMonth,
           notifySlack,
-        }),
-      });
+        });
       const monthLabel = monthOptions.find(m => m.value === applyMonth)?.label || applyMonth;
       toast.success(`Fine issued · Will be deducted from ${monthLabel} payroll · Employee notified on Slack`);
       handleOpenChange(false);

@@ -163,17 +163,14 @@ const NewShowSheet = ({ open, onOpenChange, onCreated }: NewShowSheetProps) => {
   const handleSubmit = async () => {
     setSaving(true);
     try {
-      const res = await apiFetch<{ id: string }>("/api/shows", {
-        method: "POST",
-        body: JSON.stringify({
+      const res = await api.post<{ id: string }>("/api/shows", {
           name, snapchatProfileId: snapId, category, language, cadence,
           pcloudFolderPath: pcloudPath, targetViews, startDate: startDate?.toISOString(), description,
           primaryLead, backupLead: backupLead || undefined,
           researchers: selectedResearchers,
           editors: selectedEditors, rotationMode, captionTemplate,
           qaLeadId, qaReviewers, criteria, minPassScore: minPass, maxRevisions, autoEscalate, slackChannel,
-        }),
-      });
+        });
       toast.success("Show created · Slack channel created · Team notified");
       onOpenChange(false);
       resetForm();

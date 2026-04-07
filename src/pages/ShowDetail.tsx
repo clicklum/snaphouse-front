@@ -155,7 +155,7 @@ const ShowDetail = () => {
   const handleAssign = async () => {
     if (!assignSelected) return;
     setAssignSaving(true);
-    try { await apiFetch(`/api/shows/${id}/team`, { employeeId: assignSelected, role: assignRole }); toast.success("Member assigned"); setAssignOpen(false); fetchAll(); }
+    try { await api.get(`/api/shows/${id}/team`, { employeeId: assignSelected, role: assignRole }); toast.success("Member assigned"); setAssignOpen(false); fetchAll(); }
     catch { toast.error("Failed to assign"); }
     finally { setAssignSaving(false); }
   };

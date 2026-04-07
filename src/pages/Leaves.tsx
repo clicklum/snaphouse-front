@@ -72,15 +72,12 @@ const RequestLeaveDrawer = ({ open, onOpenChange, onCreated }: { open: boolean; 
     if (!isValid || !fromDate || !toDate) return;
     setSaving(true);
     try {
-      await apiFetch("/api/leaves", {
-        method: "POST",
-        body: JSON.stringify({
+      await api.post("/api/leaves", {
           type: leaveType,
           from: format(fromDate, "yyyy-MM-dd"),
           to: format(toDate, "yyyy-MM-dd"),
           reason: reason.trim(),
-        }),
-      });
+        });
       toast.success("Leave request submitted");
       reset();
       onOpenChange(false);
@@ -193,7 +190,7 @@ const Leaves = () => {
       );
       if (isTopManager) {
         promises.push(
-          apiFetch<TeamLead[]>("/api/employees?role=team_lead&fields=id,name")
+          api.get<TeamLead[]>("/api/employees?role=team_lead&fields=id,name")
             .then(setTeamLeads)
             .catch(() => {})
         );

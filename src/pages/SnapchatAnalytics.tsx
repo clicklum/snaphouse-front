@@ -92,7 +92,7 @@ const SnapchatAnalytics = () => {
 
   const fetchData = useCallback(() => {
     setLoading(true);
-    apiFetch<SnapData>(`/api/analytics/snapchat?range=${range}&breakdown=AGE,GENDER,COUNTRY`)
+    api.get<SnapData>(`/api/analytics/snapchat?range=${range}&breakdown=AGE,GENDER,COUNTRY`)
       .then(setData)
       .catch(() => toast.error("Failed to load Snapchat analytics"))
       .finally(() => setLoading(false));

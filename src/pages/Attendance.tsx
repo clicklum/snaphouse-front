@@ -85,10 +85,7 @@ const OverridePopover = ({ record, onDone }: { record: AttendanceRecord; onDone:
   const submit = async () => {
     setSaving(true);
     try {
-      await apiFetch(`/api/attendance/${record.id}`, {
-        method: "PATCH",
-        body: JSON.stringify({ status, note: note.trim() || undefined }),
-      });
+      await api.patch(`/api/attendance/${record.id}`, { status, note: note.trim() || undefined });
       toast.success("Status updated");
       setOpen(false);
       onDone();
@@ -129,7 +126,7 @@ const BulkAbsentModal = ({ open, onOpenChange, onDone }: { open: boolean; onOpen
   useEffect(() => {
     if (!open) return;
     setLoading(true);
-    apiFetch<EmployeeOption[]>("/api/employees?fields=id,name")
+    api.get<EmployeeOption[]>("/api/employees?fields=id,name")
       .then(setEmployees)
       .catch(() => toast.error("Failed to load employees"))
       .finally(() => setLoading(false));
@@ -147,10 +144,7 @@ const BulkAbsentModal = ({ open, onOpenChange, onDone }: { open: boolean; onOpen
     if (!date || selected.size === 0) return;
     setSaving(true);
     try {
-      await apiFetch("/api/attendance/bulk", {
-        method: "POST",
-        body: JSON.stringify({ date: format(date, "yyyy-MM-dd"), employeeIds: Array.from(selected), status: "absent" }),
-      });
+      await api.post("/api/attendance/bulk", { date: format(date, "yyyy-MM-dd"), employeeIds: Array.from(selected), status: "absent" });
       toast.success(`Marked ${selected.size} employee${selected.size > 1 ? "s" : ""} absent`);
       onOpenChange(false);
       setSelected(new Set());
