@@ -88,17 +88,18 @@ const SettingsPage = () => {
 
   const fetchSettings = () => {
     setLoading(true);
+    setError(null);
     api.get<AdminSettings>("/admin/settings")
       .then((d) => {
         setData(d);
-        setGeneral(d.general);
-        setIntegrations(d.integrations);
-        setRoles(d.roles);
-        setFineReasons(d.fineReasons);
-        setAuditLog(d.auditLog);
+        setGeneral(d.general || { companyName: "", logoUrl: "", brandColor: "#D97706" });
+        setIntegrations(d.integrations || { snapchatApiToken: "", pcloudConnected: false, slackWebhookUrl: "" });
+        setRoles(d.roles || []);
+        setFineReasons(d.fineReasons || []);
+        setAuditLog(d.auditLog || []);
         setPermissionKeys(d.permissionKeys || []);
       })
-      .catch(() => toast.error("Failed to load settings"))
+      .catch((e) => setError(e.message || "Failed to load settings"))
       .finally(() => setLoading(false));
   };
 
