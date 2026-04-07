@@ -49,7 +49,7 @@ export const routeRules: RouteRule[] = [
 
 export function canAccessRoute(path: string, role: AppRole): boolean {
   if (role === "pending") {
-    return path === "/profile";
+    return path === "/";
   }
   for (const rule of routeRules) {
     if (path.startsWith(rule.pattern)) {
