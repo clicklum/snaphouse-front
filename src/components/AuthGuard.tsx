@@ -27,9 +27,9 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
 
   const role = getRole();
 
-  // Pending users can only see /profile
-  if (role === "pending" && location.pathname !== "/profile") {
-    return <Navigate to="/profile" replace />;
+  // Pending users can only see the dashboard
+  if (role === "pending" && location.pathname !== "/") {
+    return <Navigate to="/" replace />;
   }
 
   // Role-based route check
