@@ -52,7 +52,7 @@ const Employees = () => {
 
   const fetchEmployees = () => {
     setLoading(true); setError(null);
-    api.get<Employee[]>("/api/employees")
+    api.get<Employee[]>("/employees")
       .then(setEmployees)
       .catch((e) => setError(e.message || "Failed to load employees"))
       .finally(() => setLoading(false));
@@ -71,7 +71,7 @@ const Employees = () => {
 
   const openFineModal = (emp: Employee) => { setFineTarget({ id: emp.id, name: emp.name }); setFineOpen(true); };
   const handleDeactivate = async (id: string) => {
-    try { await api.patch(`/api/employees/${id}/deactivate`); toast.success("Employee deactivated"); fetchEmployees(); }
+    try { await api.patch(`/employees/${id}/deactivate`); toast.success("Employee deactivated"); fetchEmployees(); }
     catch (err: any) { toast.error(err.message || "Failed to deactivate"); }
   };
 

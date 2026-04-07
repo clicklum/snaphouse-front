@@ -87,7 +87,7 @@ const SettingsPage = () => {
 
   const fetchSettings = () => {
     setLoading(true);
-    api.get<AdminSettings>("/api/admin/settings")
+    api.get<AdminSettings>("/admin/settings")
       .then((d) => {
         setData(d);
         setGeneral(d.general);
@@ -106,7 +106,7 @@ const SettingsPage = () => {
   const save = async (section: string, payload: unknown) => {
     setSaving(true);
     try {
-      await api.patch("/api/admin/settings", { section, data: payload });
+      await api.patch("/admin/settings", { section, data: payload });
       toast.success("Settings saved");
       fetchSettings();
     } catch { toast.error("Save failed"); }
@@ -117,7 +117,7 @@ const SettingsPage = () => {
   const testSnapchat = async () => {
     setTesting(true);
     try {
-      await api.post("/api/admin/settings/test-snapchat", { token: integrations.snapchatApiToken });
+      await api.post("/admin/settings/test-snapchat", { token: integrations.snapchatApiToken });
       toast.success("Snapchat connection OK");
     } catch { toast.error("Snapchat connection failed"); }
     finally { setTesting(false); }
@@ -125,7 +125,7 @@ const SettingsPage = () => {
 
   /* ---------- pCloud ---------- */
   const connectPcloud = () => {
-    window.open(`${import.meta.env.VITE_API_BASE || "https://api.dailyvertex.io"}/api/admin/pcloud/oauth`, "_blank");
+    window.open(`${import.meta.env.VITE_API_BASE || "https://api.dailyvertex.io"}/admin/pcloud/oauth`, "_blank");
   };
 
   /* ---------- Roles toggle ---------- */

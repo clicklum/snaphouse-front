@@ -92,7 +92,7 @@ const SnapchatAnalytics = () => {
 
   const fetchData = useCallback(() => {
     setLoading(true);
-    api.get<SnapData>(`/api/analytics/snapchat?range=${range}&breakdown=AGE,GENDER,COUNTRY`)
+    api.get<SnapData>(`/analytics/snapchat?range=${range}&breakdown=AGE,GENDER,COUNTRY`)
       .then(setData)
       .catch(() => toast.error("Failed to load Snapchat analytics"))
       .finally(() => setLoading(false));
@@ -103,7 +103,7 @@ const SnapchatAnalytics = () => {
   const syncNow = async () => {
     setSyncing(true);
     try {
-      await api.post("/api/snapchat/sync");
+      await api.post("/snapchat/sync");
       toast.success("Sync started — data will refresh shortly");
       setTimeout(fetchData, 3000);
     } catch { toast.error("Sync failed"); }

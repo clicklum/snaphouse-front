@@ -64,7 +64,7 @@ const Shows = () => {
   const fetchShows = () => {
     setLoading(true);
     setError(null);
-    api.get<Show[]>("/api/shows")
+    api.get<Show[]>("/shows")
       .then(setShows)
       .catch((e) => setError(e.message || "Failed to load shows"))
       .finally(() => setLoading(false));
@@ -84,7 +84,7 @@ const Shows = () => {
 
   const handleArchive = async (id: string) => {
     try {
-      await api.patch(`/api/shows/${id}/archive`);
+      await api.patch(`/shows/${id}/archive`);
       toast.success("Show archived");
       fetchShows();
     } catch (err: any) {

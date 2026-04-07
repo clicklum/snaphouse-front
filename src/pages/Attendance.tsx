@@ -85,7 +85,7 @@ const OverridePopover = ({ record, onDone }: { record: AttendanceRecord; onDone:
   const submit = async () => {
     setSaving(true);
     try {
-      await api.patch(`/api/attendance/${record.id}`, { status, note: note.trim() || undefined });
+      await api.patch(`/attendance/${record.id}`, { status, note: note.trim() || undefined });
       toast.success("Status updated");
       setOpen(false);
       onDone();
@@ -126,7 +126,7 @@ const BulkAbsentModal = ({ open, onOpenChange, onDone }: { open: boolean; onOpen
   useEffect(() => {
     if (!open) return;
     setLoading(true);
-    api.get<EmployeeOption[]>("/api/employees?fields=id,name")
+    api.get<EmployeeOption[]>("/employees?fields=id,name")
       .then(setEmployees)
       .catch(() => toast.error("Failed to load employees"))
       .finally(() => setLoading(false));
@@ -144,7 +144,7 @@ const BulkAbsentModal = ({ open, onOpenChange, onDone }: { open: boolean; onOpen
     if (!date || selected.size === 0) return;
     setSaving(true);
     try {
-      await api.post("/api/attendance/bulk", { date: format(date, "yyyy-MM-dd"), employeeIds: Array.from(selected), status: "absent" });
+      await api.post("/attendance/bulk", { date: format(date, "yyyy-MM-dd"), employeeIds: Array.from(selected), status: "absent" });
       toast.success(`Marked ${selected.size} employee${selected.size > 1 ? "s" : ""} absent`);
       onOpenChange(false);
       setSelected(new Set());
@@ -227,12 +227,12 @@ const Attendance = () => {
   const fetchData = useCallback(() => {
     setLoading(true);
     const promises: Promise<void>[] = [
-      api.get<AttendanceData>(`/api/attendance?month=${monthStr}`).then(setData),
-      api.get<SummaryData>(`/api/attendance/summary?month=${monthStr}`).then(setSummary).catch(() => {}),
+      api.get<AttendanceData>(`/attendance?month=${monthStr}`).then(setData),
+      api.get<SummaryData>(`/attendance/summary?month=${monthStr}`).then(setSummary).catch(() => {}),
     ];
     if (isAdmin) {
       promises.push(
-        api.get<{ lateGraceMinutes: number }>("/api/admin/settings")
+        api.get<{ lateGraceMinutes: number }>("/admin/settings")
           .then(s => { setGrace(s.lateGraceMinutes); setGraceDraft(String(s.lateGraceMinutes)); })
           .catch(() => {})
       );
@@ -246,7 +246,7 @@ const Attendance = () => {
 
   const handleLeaveAction = async (leaveId: string, action: "approved" | "rejected") => {
     try {
-      await api.patch(`/api/leaves/${leaveId}`, { status: action });
+      await api.patch(`/leaves/${leaveId}`, { status: action });
       toast.success(`Leave ${action}`);
       fetchData();
     } catch { toast.error(`Failed to ${action} leave`); }
@@ -257,7 +257,7 @@ const Attendance = () => {
     if (isNaN(val) || val < 0) return;
     setGraceSaving(true);
     try {
-      await api.patch("/api/admin/settings", { lateGraceMinutes: val });
+      await api.patch("/admin/settings", { lateGraceMinutes: val });
       setGrace(val);
       setGraceEditing(false);
       toast.success("Grace period updated");
@@ -267,7 +267,7 @@ const Attendance = () => {
 
   const exportCSV = () => {
     const token = getToken();
-    const url = `${API_BASE}/api/attendance/export?month=${monthStr}`;
+    const url = `${API_BASE}/attendance/export?month=${monthStr}`;
     const a = document.createElement("a");
     a.href = `${url}&token=${token}`;
     a.download = `attendance-${monthStr}.csv`;

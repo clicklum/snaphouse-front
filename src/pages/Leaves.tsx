@@ -72,7 +72,7 @@ const RequestLeaveDrawer = ({ open, onOpenChange, onCreated }: { open: boolean; 
     if (!isValid || !fromDate || !toDate) return;
     setSaving(true);
     try {
-      await api.post("/api/leaves", {
+      await api.post("/leaves", {
           type: leaveType,
           from: format(fromDate, "yyyy-MM-dd"),
           to: format(toDate, "yyyy-MM-dd"),
@@ -181,16 +181,16 @@ const Leaves = () => {
   const fetchData = useCallback(() => {
     setLoading(true);
     const promises: Promise<void>[] = [
-      api.get<{ balances: LeaveBalance[]; leaves: LeaveRequest[] }>("/api/leaves/my")
+      api.get<{ balances: LeaveBalance[]; leaves: LeaveRequest[] }>("/leaves/my")
         .then(d => { setBalances(d.balances); setMyLeaves(d.leaves); }),
     ];
     if (isManager) {
       promises.push(
-        api.get<LeaveRequest[]>("/api/leaves/team").then(setTeamLeaves)
+        api.get<LeaveRequest[]>("/leaves/team").then(setTeamLeaves)
       );
       if (isTopManager) {
         promises.push(
-          api.get<TeamLead[]>("/api/employees?role=team_lead&fields=id,name")
+          api.get<TeamLead[]>("/employees?role=team_lead&fields=id,name")
             .then(setTeamLeads)
             .catch(() => {})
         );
@@ -207,7 +207,7 @@ const Leaves = () => {
   const handleAction = async (id: string, action: "approved" | "rejected") => {
     setActionId(id);
     try {
-      await api.patch(`/api/leaves/${id}`, { status: action });
+      await api.patch(`/leaves/${id}`, { status: action });
       toast.success(`Leave ${action}`);
       fetchData();
     } catch { toast.error(`Failed to ${action === "approved" ? "approve" : "reject"} leave`); }

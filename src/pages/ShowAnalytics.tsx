@@ -67,7 +67,7 @@ const ShowAnalyticsPage = () => {
 
   const fetchData = useCallback(() => {
     setLoading(true);
-    api.get<ShowAnalytics[]>(`/api/analytics/shows?range=${range}`)
+    api.get<ShowAnalytics[]>(`/analytics/shows?range=${range}`)
       .then(setShows)
       .catch(() => toast.error("Failed to load show analytics"))
       .finally(() => setLoading(false));
@@ -101,7 +101,7 @@ const ShowAnalyticsPage = () => {
 
   const exportCSV = () => {
     const token = getToken();
-    const url = `${API_BASE}/api/analytics/shows/export?range=${range}&token=${token}`;
+    const url = `${API_BASE}/analytics/shows/export?range=${range}&token=${token}`;
     const a = document.createElement("a");
     a.href = url;
     a.download = `show-analytics-${range}d.csv`;

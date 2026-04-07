@@ -219,7 +219,7 @@ const TeamAnalytics = () => {
       researchers: ResearcherRow[];
       teamLeads: LeadRow[];
       floorManagers: ManagerRow[];
-    }>(`/api/analytics/team?range=${range}${roleParam}`)
+    }>(`/analytics/team?range=${range}${roleParam}`)
       .then(d => {
         setEditors(d.editors || []);
         setResearchers(d.researchers || []);
@@ -237,7 +237,7 @@ const TeamAnalytics = () => {
   const exportFile = (type: "csv" | "pdf") => {
     const token = getToken();
     const a = document.createElement("a");
-    a.href = `${API_BASE}/api/analytics/team/export?range=${range}&format=${type}&token=${token}`;
+    a.href = `${API_BASE}/analytics/team/export?range=${range}&format=${type}&token=${token}`;
     a.download = `team-analytics-${range}d.${type}`;
     a.click();
   };

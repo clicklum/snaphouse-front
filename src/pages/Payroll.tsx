@@ -54,7 +54,7 @@ const Payroll = () => {
 
   const fetchData = () => {
     setLoading(true);
-    api.get<PayrollSummary>(`/api/payroll?month=${monthStr}`)
+    api.get<PayrollSummary>(`/payroll?month=${monthStr}`)
       .then(setData)
       .catch(() => toast.error("Failed to load payroll"))
       .finally(() => setLoading(false));
@@ -65,7 +65,7 @@ const Payroll = () => {
   const runPayroll = async () => {
     setRunning(true);
     try {
-      await api.post("/api/payroll/run", { month: monthStr });
+      await api.post("/payroll/run", { month: monthStr });
       toast.success("Payroll processed");
       fetchData();
     } catch { toast.error("Failed to run payroll"); }
@@ -75,7 +75,7 @@ const Payroll = () => {
   const exportPdf = async () => {
     try {
       const token = getToken();
-      const res = await fetch(`${API_BASE}/api/payroll/export?month=${monthStr}`, {
+      const res = await fetch(`${API_BASE}/payroll/export?month=${monthStr}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (!res.ok) throw new Error();

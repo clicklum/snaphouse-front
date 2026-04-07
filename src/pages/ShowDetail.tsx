@@ -110,17 +110,17 @@ const ShowDetail = () => {
   const fetchAll = () => {
     setLoading(true);
     Promise.all([
-      api.get<Show>(`/api/shows/${id}`),
-      api.get<ShowStats>(`/api/shows/${id}/stats`),
-      api.get<Episode[]>(`/api/shows/${id}/episodes`),
-      api.get<TeamMember[]>(`/api/shows/${id}/team`),
+      api.get<Show>(`/shows/${id}`),
+      api.get<ShowStats>(`/shows/${id}/stats`),
+      api.get<Episode[]>(`/shows/${id}/episodes`),
+      api.get<TeamMember[]>(`/shows/${id}/team`),
     ]).then(([s, st, ep, tm]) => {
       setShow(s); setStats(st); setEpisodes(ep); setTeam(tm); setSettingsForm(s);
     }).catch(() => toast.error("Failed to load show")).finally(() => setLoading(false));
   };
 
   const fetchInsights = () => {
-    api.get<SnapchatInsights>(`/api/shows/${id}/snapchat?range=${insightRange}`).then(setInsights).catch(() => toast.error("Failed to load insights"));
+    api.get<SnapchatInsights>(`/shows/${id}/snapchat?range=${insightRange}`).then(setInsights).catch(() => toast.error("Failed to load insights"));
   };
 
   useEffect(() => { fetchAll(); }, [id]);
@@ -128,20 +128,20 @@ const ShowDetail = () => {
 
   /* staff options */
   useEffect(() => {
-    api.get<StaffOption[]>(`/api/shows/${id}/staff?role=researcher`).then(setResearchers).catch(() => {});
-    api.get<StaffOption[]>(`/api/shows/${id}/staff?role=editor`).then(setEditors).catch(() => {});
+    api.get<StaffOption[]>(`/shows/${id}/staff?role=researcher`).then(setResearchers).catch(() => {});
+    api.get<StaffOption[]>(`/shows/${id}/staff?role=editor`).then(setEditors).catch(() => {});
   }, [id]);
 
   const handleArchive = async () => {
     setArchiving(true);
-    try { await api.patch(`/api/shows/${id}/archive`); toast.success("Show archived"); navigate("/shows", { replace: true }); }
+    try { await api.patch(`/shows/${id}/archive`); toast.success("Show archived"); navigate("/shows", { replace: true }); }
     catch { toast.error("Failed to archive"); }
     finally { setArchiving(false); setArchiveOpen(false); }
   };
 
   const handleNewEpisode = async () => {
     setEpSaving(true);
-    try { await api.post(`/api/shows/${id}/episodes`, epForm); toast.success("Episode created"); setEpDrawer(false); fetchAll(); }
+    try { await api.post(`/shows/${id}/episodes`, epForm); toast.success("Episode created"); setEpDrawer(false); fetchAll(); }
     catch { toast.error("Failed to create episode"); }
     finally { setEpSaving(false); }
   };
@@ -149,13 +149,13 @@ const ShowDetail = () => {
   const handleAssignSearch = (q: string) => {
     setAssignSearch(q);
     if (q.length < 2) { setAssignResults([]); return; }
-    api.post<StaffOption[]>(`/api/employees/search?q=${encodeURIComponent(q)}`).then(setAssignResults).catch(() => {});
+    api.post<StaffOption[]>(`/employees/search?q=${encodeURIComponent(q)}`).then(setAssignResults).catch(() => {});
   };
 
   const handleAssign = async () => {
     if (!assignSelected) return;
     setAssignSaving(true);
-    try { await api.get(`/api/shows/${id}/team`, { employeeId: assignSelected, role: assignRole }); toast.success("Member assigned"); setAssignOpen(false); fetchAll(); }
+    try { await api.get(`/shows/${id}/team`, { employeeId: assignSelected, role: assignRole }); toast.success("Member assigned"); setAssignOpen(false); fetchAll(); }
     catch { toast.error("Failed to assign"); }
     finally { setAssignSaving(false); }
   };
@@ -163,7 +163,7 @@ const ShowDetail = () => {
   const handleSettingsSave = async () => {
     if (!settingsForm) return;
     setSettingsSaving(true);
-    try { await api.patch(`/api/shows/${id}`, settingsForm); toast.success("Settings saved"); fetchAll(); }
+    try { await api.patch(`/shows/${id}`, settingsForm); toast.success("Settings saved"); fetchAll(); }
     catch { toast.error("Save failed"); }
     finally { setSettingsSaving(false); }
   };

@@ -85,7 +85,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
   const fetchTask = () => {
     if (!taskId) return;
     setLoading(true);
-    api.get<TaskDetail>(`/api/tasks/${taskId}`)
+    api.get<TaskDetail>(`/tasks/${taskId}`)
       .then(t => { setTask(t); setDescDraft(t.description); })
       .catch(() => toast.error("Failed to load task"))
       .finally(() => setLoading(false));
@@ -109,7 +109,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
   const saveDesc = async () => {
     setDescSaving(true);
     try {
-      await api.patch(`/api/tasks/${taskId}`, { description: descDraft });
+      await api.patch(`/tasks/${taskId}`, { description: descDraft });
       toast.success("Description updated");
       setDescEditing(false);
       fetchTask();
@@ -121,7 +121,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
   const markComplete = async () => {
     setCompleting(true);
     try {
-      await api.patch(`/api/tasks/${taskId}/complete`);
+      await api.patch(`/tasks/${taskId}/complete`);
       toast.success("Task marked complete");
       onOpenChange(false);
       onUpdated?.();
@@ -133,7 +133,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
     if (!revisionReason.trim()) return;
     setRevisionSending(true);
     try {
-      await api.post(`/api/tasks/${taskId}/revision`, { reason: revisionReason });
+      await api.post(`/tasks/${taskId}/revision`, { reason: revisionReason });
       toast.success("Revision requested");
       setRevisionOpen(false);
       setRevisionReason("");
@@ -146,7 +146,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
   const escalate = async () => {
     setEscalating(true);
     try {
-      await api.post(`/api/tasks/${taskId}/escalate`);
+      await api.post(`/tasks/${taskId}/escalate`);
       toast.success("Escalated — Slack alert sent");
       fetchTask();
       onUpdated?.();
@@ -160,7 +160,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
     const formData = new FormData();
     formData.append("file", file);
     try {
-      await fetch(`${import.meta.env.VITE_API_BASE || "https://api.dailyvertex.io"}/api/tasks/${taskId}/attachments`, {
+      await fetch(`${import.meta.env.VITE_API_BASE || "https://api.dailyvertex.io"}/tasks/${taskId}/attachments`, {
         method: "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("snaphouse_jwt") || ""}` },
         body: formData,

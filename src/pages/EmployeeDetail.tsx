@@ -144,7 +144,7 @@ const EmployeeDetail = () => {
   const fetchProfile = () => {
     if (!id) return;
     setLoading(true);
-    api.get<EmployeeProfile>(`/api/employees/${id}`)
+    api.get<EmployeeProfile>(`/employees/${id}`)
       .then(setProfile)
       .catch(() => toast.error("Failed to load profile"))
       .finally(() => setLoading(false));
@@ -156,7 +156,7 @@ const EmployeeDetail = () => {
   const loadPerf = () => {
     if (perf || perfLoading || !id) return;
     setPerfLoading(true);
-    api.get<PerfData>(`/api/employees/${id}/performance`)
+    api.get<PerfData>(`/employees/${id}/performance`)
       .then(setPerf)
       .catch(() => toast.error("Failed to load performance"))
       .finally(() => setPerfLoading(false));
@@ -167,7 +167,7 @@ const EmployeeDetail = () => {
     if (!id) return;
     setAttLoading(true);
     const m = format(attMonth, "yyyy-MM");
-    api.get<AttendanceDay[]>(`/api/employees/${id}/attendance?month=${m}`)
+    api.get<AttendanceDay[]>(`/employees/${id}/attendance?month=${m}`)
       .then(setAttData)
       .catch(() => toast.error("Failed to load attendance"))
       .finally(() => setAttLoading(false));
@@ -178,7 +178,7 @@ const EmployeeDetail = () => {
   const loadActivity = () => {
     if (!id) return;
     setActLoading(true);
-    api.get<{ items: ActivityEntry[]; total: number }>(`/api/employees/${id}/activity?page=${actPage}`)
+    api.get<{ items: ActivityEntry[]; total: number }>(`/employees/${id}/activity?page=${actPage}`)
       .then(d => { setActivity(d.items); setActTotal(d.total); })
       .catch(() => toast.error("Failed to load activity"))
       .finally(() => setActLoading(false));
