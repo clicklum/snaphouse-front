@@ -46,6 +46,7 @@ const Payroll = () => {
   const [month, setMonth] = useState(new Date());
   const [data, setData] = useState<PayrollSummary | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
   const [fineModal, setFineModal] = useState<PayrollEntry | null>(null);
   const [payslipModal, setPayslipModal] = useState<PayrollEntry | null>(null);
@@ -54,9 +55,17 @@ const Payroll = () => {
 
   const fetchData = () => {
     setLoading(true);
+    setError(null);
     api.get<PayrollSummary>(`/payroll?month=${monthStr}`)
-      .then(setData)
-      .catch(() => toast.error("Failed to load payroll"))
+      .then((res) => {
+        // Normalize: backend may return flat array or object
+        if (Array.isArray(res)) {
+          setData({ totalGross: 0, totalFines: 0, totalNet: 0, employeeCount: 0, entries: [] });
+        } else {
+          setData(res);
+        }
+      })
+      .catch((e) => setError(e.message || "Failed to load payroll"))
       .finally(() => setLoading(false));
   };
 

@@ -118,7 +118,7 @@ const Analytics = () => {
     setExporting(true);
     try {
       const res = await fetch(
-        `https://api.dailyvertex.io/analytics/export?range=${range}&show=${showFilter}`,
+        `${api.BASE || "https://api.dailyvertex.io/api"}/analytics/export?range=${range}&show=${showFilter}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("snaphouse_jwt") || ""}`,
