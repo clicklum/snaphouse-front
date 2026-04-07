@@ -37,4 +37,4 @@ export const clearSession = () => {
   localStorage.removeItem(EMAIL_KEY);
 };
 
-export const API_BASE = "https://api.dailyvertex.io";
+export const API_BASE = "https://api.dailyvertex.io/api";
