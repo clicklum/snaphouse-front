@@ -38,3 +38,4 @@ export const clearSession = () => {
 };
 
 export const API_BASE = "https://api.dailyvertex.io/api";
+export const API_ORIGIN = "https://api.dailyvertex.io";

@@ -1,7 +1,8 @@
 import { getToken, setToken, getRefreshToken, clearSession } from "./auth";
 
 // ─── Base URL ────────────────────────────────────────────────
-export const API_BASE = import.meta.env.VITE_API_URL || "https://api.dailyvertex.io/api";
+export const API_ORIGIN = import.meta.env.VITE_API_ORIGIN || "https://api.dailyvertex.io";
+export const API_BASE = `${API_ORIGIN}/api`;
 
 // ─── Structured API Error ────────────────────────────────────
 export class ApiError extends Error {
@@ -24,7 +25,7 @@ async function attemptRefresh(): Promise<boolean> {
   if (!refreshToken) return false;
 
   try {
-    const res = await fetch(`${API_BASE}/auth/refresh`, {
+    const res = await fetch(`${API_ORIGIN}/auth/refresh`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refreshToken }),
