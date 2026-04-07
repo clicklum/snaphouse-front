@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { format, subMonths, addMonths } from "date-fns";
-import { apiFetch, API_BASE } from "@/lib/api";
+import { api, API_BASE } from "@/lib/api";
 import { getToken } from "@/lib/auth";
 import { toast } from "sonner";
 import { ChevronLeft, ChevronRight, DollarSign, Users, AlertTriangle, TrendingUp, FileText, Download, Eye } from "lucide-react";
@@ -54,7 +54,7 @@ const Payroll = () => {
 
   const fetchData = () => {
     setLoading(true);
-    apiFetch<PayrollSummary>(`/api/payroll?month=${monthStr}`)
+    api.get<PayrollSummary>(`/api/payroll?month=${monthStr}`)
       .then(setData)
       .catch(() => toast.error("Failed to load payroll"))
       .finally(() => setLoading(false));
@@ -65,7 +65,7 @@ const Payroll = () => {
   const runPayroll = async () => {
     setRunning(true);
     try {
-      await apiFetch("/api/payroll/run", { method: "POST", body: JSON.stringify({ month: monthStr }) });
+      await api.post("/api/payroll/run", { month: monthStr });
       toast.success("Payroll processed");
       fetchData();
     } catch { toast.error("Failed to run payroll"); }

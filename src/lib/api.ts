@@ -112,10 +112,6 @@ export const api = {
     request<T>(path, { method: "DELETE" }),
 };
 
-// Legacy export for existing callers
-export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
-  return request<T>(path, options);
-}
 
 // ─── Endpoint constants ──────────────────────────────────────
 export const ENDPOINTS = {

@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getRole, getUserName } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { format, parseISO, differenceInCalendarDays } from "date-fns";
@@ -72,15 +72,12 @@ const RequestLeaveDrawer = ({ open, onOpenChange, onCreated }: { open: boolean; 
     if (!isValid || !fromDate || !toDate) return;
     setSaving(true);
     try {
-      await apiFetch("/api/leaves", {
-        method: "POST",
-        body: JSON.stringify({
+      await api.post("/api/leaves", {
           type: leaveType,
           from: format(fromDate, "yyyy-MM-dd"),
           to: format(toDate, "yyyy-MM-dd"),
           reason: reason.trim(),
-        }),
-      });
+        });
       toast.success("Leave request submitted");
       reset();
       onOpenChange(false);
@@ -184,16 +181,16 @@ const Leaves = () => {
   const fetchData = useCallback(() => {
     setLoading(true);
     const promises: Promise<void>[] = [
-      apiFetch<{ balances: LeaveBalance[]; leaves: LeaveRequest[] }>("/api/leaves/my")
+      api.get<{ balances: LeaveBalance[]; leaves: LeaveRequest[] }>("/api/leaves/my")
         .then(d => { setBalances(d.balances); setMyLeaves(d.leaves); }),
     ];
     if (isManager) {
       promises.push(
-        apiFetch<LeaveRequest[]>("/api/leaves/team").then(setTeamLeaves)
+        api.get<LeaveRequest[]>("/api/leaves/team").then(setTeamLeaves)
       );
       if (isTopManager) {
         promises.push(
-          apiFetch<TeamLead[]>("/api/employees?role=team_lead&fields=id,name")
+          api.get<TeamLead[]>("/api/employees?role=team_lead&fields=id,name")
             .then(setTeamLeads)
             .catch(() => {})
         );
@@ -210,7 +207,7 @@ const Leaves = () => {
   const handleAction = async (id: string, action: "approved" | "rejected") => {
     setActionId(id);
     try {
-      await apiFetch(`/api/leaves/${id}`, { method: "PATCH", body: JSON.stringify({ status: action }) });
+      await api.patch(`/api/leaves/${id}`, { status: action });
       toast.success(`Leave ${action}`);
       fetchData();
     } catch { toast.error(`Failed to ${action === "approved" ? "approve" : "reject"} leave`); }

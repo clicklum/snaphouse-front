@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getRole } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -139,7 +139,7 @@ const GlobalSearch = ({ open, onOpenChange }: Props) => {
     if (q.trim().length < 2) { setResults(null); setLoading(false); return; }
     setLoading(true);
     try {
-      const data = await apiFetch<SearchResults>(`/api/search?q=${encodeURIComponent(q)}`);
+      const data = await api.get<SearchResults>(`/api/search?q=${encodeURIComponent(q)}`);
       setResults(data);
       setActiveIndex(-1);
     } catch {

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -94,13 +94,10 @@ const AddEmployeeSheet = ({ open, onOpenChange, onCreated }: AddEmployeeSheetPro
     }
     setSaving(true);
     try {
-      await apiFetch("/api/employees", {
-        method: "POST",
-        body: JSON.stringify({
+      await api.post("/api/employees", {
           ...result.data,
           joinDate: result.data.joinDate.toISOString().slice(0, 10),
-        }),
-      });
+        });
       toast.success("Employee added");
       onOpenChange(false);
       setForm({ ...emptyForm });

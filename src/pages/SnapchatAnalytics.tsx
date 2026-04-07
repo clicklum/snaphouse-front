@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { apiFetch, API_BASE } from "@/lib/api";
+import { api, API_BASE } from "@/lib/api";
 import { getRole } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -92,7 +92,7 @@ const SnapchatAnalytics = () => {
 
   const fetchData = useCallback(() => {
     setLoading(true);
-    apiFetch<SnapData>(`/api/analytics/snapchat?range=${range}&breakdown=AGE,GENDER,COUNTRY`)
+    api.get<SnapData>(`/api/analytics/snapchat?range=${range}&breakdown=AGE,GENDER,COUNTRY`)
       .then(setData)
       .catch(() => toast.error("Failed to load Snapchat analytics"))
       .finally(() => setLoading(false));
@@ -103,7 +103,7 @@ const SnapchatAnalytics = () => {
   const syncNow = async () => {
     setSyncing(true);
     try {
-      await apiFetch("/api/snapchat/sync", { method: "POST" });
+      await api.post("/api/snapchat/sync");
       toast.success("Sync started — data will refresh shortly");
       setTimeout(fetchData, 3000);
     } catch { toast.error("Sync failed"); }

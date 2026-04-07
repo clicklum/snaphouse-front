@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import IssueFineModal from "@/components/IssueFineModal";
 import { useParams, Link } from "react-router-dom";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getRole } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -144,7 +144,7 @@ const EmployeeDetail = () => {
   const fetchProfile = () => {
     if (!id) return;
     setLoading(true);
-    apiFetch<EmployeeProfile>(`/api/employees/${id}`)
+    api.get<EmployeeProfile>(`/api/employees/${id}`)
       .then(setProfile)
       .catch(() => toast.error("Failed to load profile"))
       .finally(() => setLoading(false));
@@ -156,7 +156,7 @@ const EmployeeDetail = () => {
   const loadPerf = () => {
     if (perf || perfLoading || !id) return;
     setPerfLoading(true);
-    apiFetch<PerfData>(`/api/employees/${id}/performance`)
+    api.get<PerfData>(`/api/employees/${id}/performance`)
       .then(setPerf)
       .catch(() => toast.error("Failed to load performance"))
       .finally(() => setPerfLoading(false));
@@ -167,7 +167,7 @@ const EmployeeDetail = () => {
     if (!id) return;
     setAttLoading(true);
     const m = format(attMonth, "yyyy-MM");
-    apiFetch<AttendanceDay[]>(`/api/employees/${id}/attendance?month=${m}`)
+    api.get<AttendanceDay[]>(`/api/employees/${id}/attendance?month=${m}`)
       .then(setAttData)
       .catch(() => toast.error("Failed to load attendance"))
       .finally(() => setAttLoading(false));
@@ -178,7 +178,7 @@ const EmployeeDetail = () => {
   const loadActivity = () => {
     if (!id) return;
     setActLoading(true);
-    apiFetch<{ items: ActivityEntry[]; total: number }>(`/api/employees/${id}/activity?page=${actPage}`)
+    api.get<{ items: ActivityEntry[]; total: number }>(`/api/employees/${id}/activity?page=${actPage}`)
       .then(d => { setActivity(d.items); setActTotal(d.total); })
       .catch(() => toast.error("Failed to load activity"))
       .finally(() => setActLoading(false));

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getRole } from "@/lib/auth";
 import { toast } from "sonner";
 import { differenceInHours, differenceInMinutes, isPast, parseISO } from "date-fns";
@@ -85,7 +85,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
   const fetchTask = () => {
     if (!taskId) return;
     setLoading(true);
-    apiFetch<TaskDetail>(`/api/tasks/${taskId}`)
+    api.get<TaskDetail>(`/api/tasks/${taskId}`)
       .then(t => { setTask(t); setDescDraft(t.description); })
       .catch(() => toast.error("Failed to load task"))
       .finally(() => setLoading(false));
@@ -109,7 +109,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
   const saveDesc = async () => {
     setDescSaving(true);
     try {
-      await apiFetch(`/api/tasks/${taskId}`, { method: "PATCH", body: JSON.stringify({ description: descDraft }) });
+      await api.patch(`/api/tasks/${taskId}`, { description: descDraft });
       toast.success("Description updated");
       setDescEditing(false);
       fetchTask();
@@ -121,7 +121,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
   const markComplete = async () => {
     setCompleting(true);
     try {
-      await apiFetch(`/api/tasks/${taskId}/complete`, { method: "PATCH" });
+      await api.patch(`/api/tasks/${taskId}/complete`);
       toast.success("Task marked complete");
       onOpenChange(false);
       onUpdated?.();
@@ -133,7 +133,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
     if (!revisionReason.trim()) return;
     setRevisionSending(true);
     try {
-      await apiFetch(`/api/tasks/${taskId}/revision`, { method: "POST", body: JSON.stringify({ reason: revisionReason }) });
+      await api.post(`/api/tasks/${taskId}/revision`, { reason: revisionReason });
       toast.success("Revision requested");
       setRevisionOpen(false);
       setRevisionReason("");
@@ -146,7 +146,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
   const escalate = async () => {
     setEscalating(true);
     try {
-      await apiFetch(`/api/tasks/${taskId}/escalate`, { method: "POST" });
+      await api.post(`/api/tasks/${taskId}/escalate`);
       toast.success("Escalated — Slack alert sent");
       fetchTask();
       onUpdated?.();

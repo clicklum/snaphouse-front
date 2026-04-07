@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { getUserName } from "@/lib/auth";
 import type { Task } from "@/lib/types";
 import TaskDetailDrawer from "@/components/TaskDetailDrawer";
@@ -62,7 +62,7 @@ const MyTasks = () => {
   const fetchTasks = useCallback(() => {
     setLoading(true);
     setError(null);
-    apiFetch<MyTask[]>("/api/tasks/my")
+    api.get<MyTask[]>("/api/tasks/my")
       .then(setTasks)
       .catch((e) => setError(e.message || "Failed to load your tasks"))
       .finally(() => setLoading(false));

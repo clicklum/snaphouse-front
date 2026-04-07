@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatCardSkeleton, TableSkeleton as TableSkeletonShared } from "@/components/PageSkeletons";
@@ -92,7 +92,7 @@ const Analytics = () => {
   const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
-    apiFetch<ShowOption[]>("/api/shows")
+    api.get<ShowOption[]>("/api/shows")
       .then((res) => {
         if (Array.isArray(res)) {
           setShows(res.map((s: any) => ({ id: s.id, name: s.name })));
@@ -104,7 +104,7 @@ const Analytics = () => {
   const fetchData = useCallback(() => {
     setLoading(true);
     setError(null);
-    apiFetch<AnalyticsData>(`/api/analytics?range=${range}&show=${showFilter}`)
+    api.get<AnalyticsData>(`/api/analytics?range=${range}&show=${showFilter}`)
       .then(setData)
       .catch((e) => setError(e.message || "Failed to load analytics"))
       .finally(() => setLoading(false));

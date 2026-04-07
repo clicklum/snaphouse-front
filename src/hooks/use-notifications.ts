@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { apiFetch } from "@/lib/api";
+import { api } from "@/lib/api";
 
 export type NotificationType =
   | "task_assigned"
@@ -57,7 +57,7 @@ export function useNotifications() {
 
   const fetchNotifications = useCallback(async (p = 1, append = false) => {
     try {
-      const res = await apiFetch<PaginatedResponse>(`/api/notifications?page=${p}&limit=20`);
+      const res = await api.get<PaginatedResponse>(`/api/notifications?page=${p}&limit=20`);
       setNotifications(prev => append ? [...prev, ...res.data] : res.data);
       setHasMore(res.hasMore);
       setUnreadCount(res.data.filter(n => !n.read).length + (append ? unreadCount : 0));
@@ -71,7 +71,7 @@ export function useNotifications() {
   /* Poll for unread count only */
   const pollCount = useCallback(async () => {
     try {
-      const res = await apiFetch<{ count: number }>("/api/notifications?countOnly=true");
+      const res = await api.get<{ count: number }>("/api/notifications?countOnly=true");
       setUnreadCount(res.count);
     } catch {
       // silent
@@ -94,7 +94,7 @@ export function useNotifications() {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
     setUnreadCount(prev => Math.max(0, prev - 1));
     try {
-      await apiFetch(`/api/notifications/read/${id}`, { method: "POST" });
+      await api.post(`/api/notifications/read/${id}`);
     } catch { /* silent */ }
   }, []);
 
@@ -102,7 +102,7 @@ export function useNotifications() {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     setUnreadCount(0);
     try {
-      await apiFetch("/api/notifications/read-all", { method: "POST" });
+      await api.post("/api/notifications/read-all");
     } catch { /* silent */ }
   }, []);
 
