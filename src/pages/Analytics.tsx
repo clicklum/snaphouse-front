@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { api } from "@/lib/api";
+import { api, API_BASE } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatCardSkeleton, TableSkeleton as TableSkeletonShared } from "@/components/PageSkeletons";
@@ -118,7 +118,7 @@ const Analytics = () => {
     setExporting(true);
     try {
       const res = await fetch(
-        `https://api.dailyvertex.io/analytics/export?range=${range}&show=${showFilter}`,
+        `${API_BASE}/analytics/export?range=${range}&show=${showFilter}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("snaphouse_jwt") || ""}`,

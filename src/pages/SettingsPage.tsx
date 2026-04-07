@@ -68,6 +68,7 @@ const SectionSkeleton = () => (
 const SettingsPage = () => {
   const [data, setData] = useState<AdminSettings | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   /* local editable state */
@@ -87,17 +88,18 @@ const SettingsPage = () => {
 
   const fetchSettings = () => {
     setLoading(true);
+    setError(null);
     api.get<AdminSettings>("/admin/settings")
       .then((d) => {
         setData(d);
-        setGeneral(d.general);
-        setIntegrations(d.integrations);
-        setRoles(d.roles);
-        setFineReasons(d.fineReasons);
-        setAuditLog(d.auditLog);
+        setGeneral(d.general || { companyName: "", logoUrl: "", brandColor: "#D97706" });
+        setIntegrations(d.integrations || { snapchatApiToken: "", pcloudConnected: false, slackWebhookUrl: "" });
+        setRoles(d.roles || []);
+        setFineReasons(d.fineReasons || []);
+        setAuditLog(d.auditLog || []);
         setPermissionKeys(d.permissionKeys || []);
       })
-      .catch(() => toast.error("Failed to load settings"))
+      .catch((e) => setError(e.message || "Failed to load settings"))
       .finally(() => setLoading(false));
   };
 
@@ -168,6 +170,21 @@ const SettingsPage = () => {
     <div className="space-y-6">
       <div><Skeleton className="h-8 w-48 mb-2" /><Skeleton className="h-4 w-64" /></div>
       <SectionSkeleton />
+    </div>
+  );
+
+  if (error) return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="font-display text-2xl font-bold flex items-center gap-2"><Settings className="h-6 w-6" />Admin Settings</h1>
+        <p className="text-sm text-muted-foreground">Manage company configuration, integrations, and permissions.</p>
+      </div>
+      <Card className="border-border">
+        <CardContent className="flex flex-col items-center justify-center py-16 gap-4">
+          <p className="text-muted-foreground text-sm">This feature requires the <code className="text-primary">/admin/settings</code> backend endpoint to be implemented.</p>
+          <Button variant="outline" onClick={fetchSettings}>Try Again</Button>
+        </CardContent>
+      </Card>
     </div>
   );
 
