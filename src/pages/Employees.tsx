@@ -71,7 +71,7 @@ const Employees = () => {
 
   const openFineModal = (emp: Employee) => { setFineTarget({ id: emp.id, name: emp.name }); setFineOpen(true); };
   const handleDeactivate = async (id: string) => {
-    try { await api.patch(`/employees/${id}/deactivate`); toast.success("Employee deactivated"); fetchEmployees(); }
+    try { await api.delete(`/employees/${id}`); toast.success("Employee deactivated"); fetchEmployees(); }
     catch (err: any) { toast.error(err.message || "Failed to deactivate"); }
   };
 

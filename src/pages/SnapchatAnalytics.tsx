@@ -103,7 +103,7 @@ const SnapchatAnalytics = () => {
   const syncNow = async () => {
     setSyncing(true);
     try {
-      await api.post("/snapchat/sync");
+      await api.post("/analytics/snapchat", { action: "sync" });
       toast.success("Sync started — data will refresh shortly");
       setTimeout(fetchData, 3000);
     } catch { toast.error("Sync failed"); }

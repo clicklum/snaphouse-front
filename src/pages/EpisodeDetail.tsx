@@ -95,7 +95,7 @@ const EpisodeDetail = () => {
   useEffect(() => { fetchData(); }, [id]);
   useEffect(() => {
     if (data && isLeadOrAdmin) {
-      api.get<StaffOption[]>(`/shows/${data.showId}/staff`).then(setStaffOptions).catch(() => {});
+      api.get<StaffOption[]>(`/employees?show=${data.showId}`).then(setStaffOptions).catch(() => {});
     }
   }, [data?.showId]);
 
@@ -143,7 +143,7 @@ const EpisodeDetail = () => {
   const checkPcloud = async () => {
     setPcloudChecking(true);
     try {
-      const res = await api.post<{ found: boolean }>(`/episodes/${id}/pcloud-check`);
+      const res = await api.get<{ found: boolean }>(`/episodes/${id}/pcloud-check`);
       setPcloudFound(res.found);
     } catch { toast.error("pCloud check failed"); }
     finally { setPcloudChecking(false); }
@@ -152,7 +152,7 @@ const EpisodeDetail = () => {
   const verifyPcloud = async () => {
     setPcloudVerifying(true);
     try {
-      await api.get(`/episodes/${id}/pcloud-verify`);
+      await api.post(`/episodes/${id}/verify`);
       toast.success("Marked as verified"); fetchData();
     } catch { toast.error("Verification failed"); }
     finally { setPcloudVerifying(false); }

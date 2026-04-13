@@ -237,7 +237,7 @@ const TeamAnalytics = () => {
   const exportFile = (type: "csv" | "pdf") => {
     const token = getToken();
     const a = document.createElement("a");
-    a.href = `${API_BASE}/analytics/team/export?range=${range}&format=${type}&token=${token}`;
+    a.href = `${API_BASE}/analytics/export?type=team&range=${range}&format=${type}&token=${token}`;
     a.download = `team-analytics-${range}d.${type}`;
     a.click();
   };

@@ -181,12 +181,12 @@ const Leaves = () => {
   const fetchData = useCallback(() => {
     setLoading(true);
     const promises: Promise<void>[] = [
-      api.get<{ balances: LeaveBalance[]; leaves: LeaveRequest[] }>("/leaves/my")
+      api.get<{ balances: LeaveBalance[]; leaves: LeaveRequest[] }>("/leaves?scope=my")
         .then(d => { setBalances(d.balances); setMyLeaves(d.leaves); }),
     ];
     if (isManager) {
       promises.push(
-        api.get<LeaveRequest[]>("/leaves/team").then(setTeamLeaves)
+        api.get<LeaveRequest[]>("/leaves?scope=team").then(setTeamLeaves)
       );
       if (isTopManager) {
         promises.push(

@@ -119,7 +119,7 @@ const SettingsPage = () => {
   const testSnapchat = async () => {
     setTesting(true);
     try {
-      await api.post("/admin/settings/test-snapchat", { token: integrations.snapchatApiToken });
+      await api.patch("/admin/settings", { section: "test-snapchat", data: { token: integrations.snapchatApiToken } });
       toast.success("Snapchat connection OK");
     } catch { toast.error("Snapchat connection failed"); }
     finally { setTesting(false); }
@@ -127,7 +127,7 @@ const SettingsPage = () => {
 
   /* ---------- pCloud ---------- */
   const connectPcloud = () => {
-    window.open(`${import.meta.env.VITE_API_BASE || "https://api.dailyvertex.io"}/admin/pcloud/oauth`, "_blank");
+    window.open(`${import.meta.env.VITE_API_BASE || "https://api.dailyvertex.io"}/api/pcloud/test`, "_blank");
   };
 
   /* ---------- Roles toggle ---------- */
