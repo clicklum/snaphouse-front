@@ -117,57 +117,74 @@ export const api = {
 
 // ─── Endpoint constants ──────────────────────────────────────
 export const ENDPOINTS = {
-  // Auth
+  // Auth (use API_ORIGIN, not API_BASE)
   AUTH_LOGIN: "/auth/login",
   AUTH_REFRESH: "/auth/refresh",
   AUTH_SLACK_CALLBACK: "/auth/slack/callback",
   AUTH_LOGOUT: "/auth/logout",
+  AUTH_ME: "/auth/me",
+  AUTH_SET_PASSWORD: "/auth/set-password",
 
   // Shows
   SHOWS: "/shows",
   SHOW: (id: string) => `/shows/${id}`,
   SHOW_STATS: (id: string) => `/shows/${id}/stats`,
-  SHOW_SNAPCHAT: (id: string) => `/shows/${id}/snapchat`,
+  SHOW_ASSIGN: (id: string) => `/shows/${id}/assign`,
+  SHOW_UNASSIGN: (id: string, empId: string) => `/shows/${id}/assign/${empId}`,
 
   // Episodes
+  EPISODES: "/episodes",
+  EPISODES_TODAY: "/episodes/today",
   EPISODE: (id: string) => `/episodes/${id}`,
+  EPISODE_NOTES: (id: string) => `/episodes/${id}/notes`,
   EPISODE_QA: (id: string) => `/episodes/${id}/qa`,
   EPISODE_PCLOUD: (id: string) => `/episodes/${id}/pcloud-check`,
-  EPISODE_NOTES: (id: string) => `/episodes/${id}/notes`,
+  EPISODE_VERIFY: (id: string) => `/episodes/${id}/verify`,
 
   // Tasks
   TASKS: "/tasks",
+  TASKS_MY: "/tasks/my",
   TASK: (id: string) => `/tasks/${id}`,
   TASK_COMPLETE: (id: string) => `/tasks/${id}/complete`,
-  TASK_REVISION: (id: string) => `/tasks/${id}/revision`,
+  TASK_STAGE: (id: string) => `/tasks/${id}/stage`,
+  TASK_ESCALATE: (id: string) => `/tasks/${id}/escalate`,
 
   // Employees
   EMPLOYEES: "/employees",
   EMPLOYEE: (id: string) => `/employees/${id}`,
   EMPLOYEE_PERFORMANCE: (id: string) => `/employees/${id}/performance`,
+  EMPLOYEE_INVITE: "/employees/invite",
 
   // Attendance
   ATTENDANCE: "/attendance",
-  ATTENDANCE_EXPORT: "/attendance/export",
   ATTENDANCE_SUMMARY: "/attendance/summary",
+  ATTENDANCE_CLOCK_IN: "/attendance/clock-in",
+  ATTENDANCE_CLOCK_OUT: "/attendance/clock-out",
+  ATTENDANCE_EXPORT: "/attendance/export",
 
   // Payroll
   PAYROLL: "/payroll",
   PAYROLL_RUN: "/payroll/run",
-  PAYROLL_EXPORT: "/payroll/export",
+  PAYROLL_MARK_PAID: (id: string) => `/payroll/${id}/mark-paid`,
+
+  // Fines
+  FINES: "/fines",
+
+  // Leaves
+  LEAVES: "/leaves",
 
   // Analytics
   ANALYTICS_SUMMARY: "/analytics/summary",
+  ANALYTICS_WEEKLY: "/analytics/weekly",
   ANALYTICS_SHOWS: "/analytics/shows",
   ANALYTICS_TEAM: "/analytics/team",
   ANALYTICS_SNAPCHAT: "/analytics/snapchat",
+  ANALYTICS_EXPORT: "/analytics/export",
 
   // Admin
   ADMIN_SETTINGS: "/admin/settings",
-  ADMIN_USERS: "/admin/users",
-  ADMIN_USERS_INVITE: "/admin/users/invite",
   ADMIN_FINE_REASONS: "/admin/fine-reasons",
-  ADMIN_PERMISSIONS: "/admin/permissions",
+  ADMIN_AUDIT_LOG: "/admin/audit-log",
 
   // Notifications
   NOTIFICATIONS: "/notifications",
@@ -176,6 +193,9 @@ export const ENDPOINTS = {
 
   // Search
   SEARCH: "/search",
+
+  // pCloud
+  PCLOUD_TEST: "/pcloud/test",
 } as const;
 
 // ─── React Query stale-time presets ──────────────────────────
