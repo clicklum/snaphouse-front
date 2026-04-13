@@ -101,7 +101,7 @@ const ShowAnalyticsPage = () => {
 
   const exportCSV = () => {
     const token = getToken();
-    const url = `${API_BASE}/analytics/shows/export?range=${range}&token=${token}`;
+    const url = `${API_BASE}/analytics/export?type=shows&range=${range}&token=${token}`;
     const a = document.createElement("a");
     a.href = url;
     a.download = `show-analytics-${range}d.csv`;

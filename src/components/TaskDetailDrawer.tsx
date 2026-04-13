@@ -160,7 +160,7 @@ const TaskDetailDrawer = ({ taskId, open, onOpenChange, onUpdated }: TaskDetailD
     const formData = new FormData();
     formData.append("file", file);
     try {
-      await fetch(`${import.meta.env.VITE_API_BASE || "https://api.dailyvertex.io"}/tasks/${taskId}/attachments`, {
+      await fetch(`${import.meta.env.VITE_API_BASE || "https://api.dailyvertex.io"}/api/tasks/${taskId}/attachments`, {
         method: "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("snaphouse_jwt") || ""}` },
         body: formData,

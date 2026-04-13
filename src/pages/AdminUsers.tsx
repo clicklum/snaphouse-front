@@ -121,8 +121,8 @@ const AdminUsers = () => {
     setLoading(true);
     try {
       const [mgmt, slack] = await Promise.all([
-        api.get<ManagementUser[]>("/admin/users?type=management"),
-        api.get<SlackEmployee[]>("/admin/users?type=slack"),
+        api.get<ManagementUser[]>("/employees?auth_type=email"),
+        api.get<SlackEmployee[]>("/employees?auth_type=slack"),
       ]);
       setMgmtUsers(mgmt);
       setSlackUsers(slack);
@@ -149,7 +149,7 @@ const AdminUsers = () => {
     if (err) { setEmailError(err); return; }
     setInviting(true);
     try {
-      await api.post("/admin/users/invite", { email: inviteEmail, role: inviteRole });
+      await api.post("/employees/invite", { email: inviteEmail, role: inviteRole });
       toast.success("Invite sent — user will receive a set-password email");
       setInviteOpen(false);
       setInviteEmail("");
@@ -166,7 +166,7 @@ const AdminUsers = () => {
     if (!editRoleTarget || !newRole) return;
     setSavingRole(true);
     try {
-      await api.patch(`/admin/users/${editRoleTarget.id}`, { role: newRole });
+      await api.patch(`/employees/${editRoleTarget.id}`, { role: newRole });
       toast.success(`Role updated to ${formatRole(newRole)}${editRoleTarget.type === "slack" ? " — Slack DM sent" : ""}`);
       setEditRoleTarget(null);
       fetchData();
@@ -180,7 +180,7 @@ const AdminUsers = () => {
   /* ── Reset password ── */
   const handleResetPassword = async (user: ManagementUser) => {
     try {
-      await api.post(`/admin/users/${user.id}/reset-password`);
+      await api.post(`/employees/${user.id}/reset-password`);
       toast.success(`Password reset email sent to ${user.email}`);
     } catch {
       toast.error("Failed to send password reset");
@@ -190,7 +190,7 @@ const AdminUsers = () => {
   /* ── Deactivate ── */
   const handleDeactivate = async (id: string, type: "mgmt" | "slack") => {
     try {
-      await api.post(`/admin/users/${id}/deactivate`);
+      await api.delete(`/employees/${id}`);
       toast.success("User deactivated — all tokens revoked");
       fetchData();
     } catch {
@@ -203,7 +203,7 @@ const AdminUsers = () => {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      await api.delete(`/admin/users/${deleteTarget.id}`);
+      await api.delete(`/employees/${deleteTarget.id}`);
       toast.success("User deleted permanently");
       setDeleteTarget(null);
       fetchData();

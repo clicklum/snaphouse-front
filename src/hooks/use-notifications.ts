@@ -94,7 +94,7 @@ export function useNotifications() {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
     setUnreadCount(prev => Math.max(0, prev - 1));
     try {
-      await api.post(`/notifications/read/${id}`);
+      await api.patch(`/notifications/read/${id}`);
     } catch { /* silent */ }
   }, []);
 
@@ -102,7 +102,7 @@ export function useNotifications() {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     setUnreadCount(0);
     try {
-      await api.post("/notifications/read-all");
+      await api.patch("/notifications/read-all");
     } catch { /* silent */ }
   }, []);
 
